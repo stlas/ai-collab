@@ -1,0 +1,43 @@
+Führe eine umfassende Code-Review für folgenden Code durch: ${PROMPT}
+
+## Review-Kriterien:
+
+### 🔍 Code-Qualität
+- Lesbarkeit und Verständlichkeit
+- Konsistenz mit Best Practices
+- Angemessene Kommentierung
+- Modulare Struktur
+
+### 🛡️ Sicherheit & Robustheit
+- Potenzielle Sicherheitslücken
+- Error-Handling und Validierung
+- Input-Sanitization
+- Race Conditions
+
+### ⚡ Performance
+- Algorithmus-Effizienz
+- Speicher-Nutzung
+- Potenzielle Bottlenecks
+- Skalierbarkeit
+
+### 🧪 Testbarkeit
+- Unit-Test-Freundlichkeit
+- Dependency Injection
+- Mocking-Möglichkeiten
+- Isolierte Funktionen
+
+## Ausgabeformat:
+
+**✅ Positives:**
+- Was ist gut gelöst
+
+**⚠️ Verbesserungen:**
+- Konkrete Verbesserungsvorschläge mit Code-Beispielen
+
+**🚨 Kritische Punkte:**
+- Schwerwiegende Probleme die sofort behoben werden müssen
+
+**💡 Empfehlungen:**
+- Best Practices und weiterführende Optimierungen
+
+Halte die Review konstruktiv, spezifisch und umsetzbar.

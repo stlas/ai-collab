@@ -1,0 +1,80 @@
+Optimiere folgenden Code für maximale Performance und Effizienz: ${PROMPT}
+
+## ⚡ Performance-Optimierungs-Framework:
+
+### 1. Profiling & Messung
+- **Baseline:** Aktuelle Performance-Metriken
+- **Bottlenecks:** Identifikation der langsamsten Teile
+- **Resource Usage:** CPU, Memory, I/O, Network
+
+### 2. Algorithmus-Optimierung
+- **Komplexitäts-Analyse:** Big O Notation Review
+- **Datenstrukturen:** Optimale Container-Wahl
+- **Algorithmus-Alternativen:** Effizientere Lösungsansätze
+
+### 3. Code-Level-Optimierungen
+```
+// Vorher (unoptimiert):
+[Originaler Code]
+// Performance: [Metriken]
+
+// Nachher (optimiert):
+[Optimierter Code]
+// Performance: [Verbesserte Metriken]
+// Verbesserung: [X% schneller, Y% weniger Memory]
+```
+
+### 4. Speicher-Optimierung
+- **Memory Pools:** Wiederverwendung von Objekten
+- **Garbage Collection:** Minimierung der GC-Pressure
+- **Memory Leaks:** Vermeidung von Speicherlecks
+
+### 5. I/O-Optimierung
+- **Batch Operations:** Reduzierung von I/O-Calls
+- **Asynchrone Verarbeitung:** Non-blocking Operations
+- **Caching:** Intelligentes Zwischenspeichern
+
+### 6. Concurrency & Parallelität
+- **Thread Safety:** Sichere Parallelverarbeitung
+- **Load Balancing:** Gleichmäßige Arbeitsverteilung
+- **Lock-Free Algorithms:** Vermeidung von Sperren
+
+## 🎯 Optimierungs-Strategien:
+
+### 🔄 Lazy Loading
+- On-demand Initialisierung
+- Verzögerte Ressourcen-Allokation
+
+### 📊 Data Structures
+- Optimale Container-Wahl
+- Index-Strategien
+- Hashing-Optimierung
+
+### 🧠 Algorithmic Improvements
+- Memoization
+- Dynamic Programming
+- Divide & Conquer
+
+### 💾 Resource Management
+- Connection Pooling
+- Object Reuse
+- Stream Processing
+
+## 📈 Messbare Verbesserungen:
+
+### Performance Metrics
+- **Execution Time:** [Vorher] → [Nachher] ([X%] Verbesserung)
+- **Memory Usage:** [Vorher] → [Nachher] ([Y%] Reduzierung)
+- **Throughput:** [Vorher] → [Nachher] ([Z%] Steigerung)
+
+### Skalierbarkeit
+- **Load Testing:** Verhalten unter Last
+- **Stress Testing:** Breaking Points
+- **Capacity Planning:** Wachstums-Projektionen
+
+## ⚖️ Trade-off-Analyse:
+- **Code-Komplexität vs. Performance**
+- **Memory vs. Speed**
+- **Maintainability vs. Optimization**
+
+Liefere messbar verbesserten Code mit detaillierter Performance-Analyse und Benchmarks.

@@ -1,0 +1,69 @@
+Entwickle folgendes Feature vollständig: ${PROMPT}
+
+## 🚀 Feature-Entwicklung Methodology:
+
+### 1. Requirements-Analyse
+- **User Story:** Wer braucht was und warum?
+- **Akzeptanzkriterien:** Wann ist das Feature "fertig"?
+- **Non-Functional Requirements:** Performance, Security, Usability
+
+### 2. Design & Architektur
+- **API-Design:** Interfaces und Contracts
+- **Datenmodell:** Strukturen und Beziehungen
+- **Integration Points:** Abhängigkeiten zu anderen Komponenten
+
+### 3. Implementation Strategy
+```
+// Kernfunktionalität
+[Haupt-Implementation]
+
+// Helper Functions
+[Unterstützende Funktionen]
+
+// Error Handling
+[Robuste Fehlerbehandlung]
+
+// Configuration
+[Konfigurationsmöglichkeiten]
+```
+
+### 4. Testing Strategy
+- **Unit Tests:** Jede Funktion einzeln testen
+- **Integration Tests:** Zusammenspiel der Komponenten
+- **End-to-End Tests:** Vollständige User Journeys
+
+### 5. Documentation
+- **API Documentation:** Öffentliche Interfaces
+- **Usage Examples:** Praktische Anwendungsbeispiele
+- **Configuration Guide:** Setup und Konfiguration
+
+### 6. Deployment Considerations
+- **Rollout Strategy:** Wie wird das Feature ausgerollt?
+- **Feature Flags:** Schrittweise Aktivierung
+- **Monitoring:** Erfolgs-Metriken
+
+## 🎯 Code-Qualitäts-Standards:
+
+### ✨ Clean Code Principles
+- **SOLID Principles:** Single Responsibility, Open/Closed, etc.
+- **DRY:** Don't Repeat Yourself
+- **KISS:** Keep It Simple, Stupid
+
+### 🛡️ Defensive Programming
+- Input-Validierung
+- Graceful Error Handling
+- Logging und Monitoring
+
+### 📈 Performance & Scalability
+- Efficient Algorithms
+- Resource Management
+- Caching-Strategien
+
+## 📋 Deliverables:
+1. **Vollständiger, produktionsreifer Code**
+2. **Comprehensive Tests**
+3. **API Documentation**
+4. **Usage Examples**
+5. **Migration Guide (falls nötig)**
+
+Entwickle modularen, erweiterbaren und wartbaren Code mit exzellenter Dokumentation.

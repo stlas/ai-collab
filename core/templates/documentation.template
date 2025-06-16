@@ -1,0 +1,108 @@
+Erstelle umfassende Dokumentation für: ${PROMPT}
+
+## 📚 Dokumentations-Framework:
+
+### 1. Executive Summary
+- **Zweck:** Was macht diese Komponente/Feature?
+- **Zielgruppe:** Wer nutzt diese Dokumentation?
+- **Scope:** Was ist abgedeckt, was nicht?
+
+### 2. Getting Started
+```bash
+# Quick Installation
+[Installation Commands]
+
+# Basic Usage
+[Einfache Beispiele]
+
+# First Steps
+[Schritt-für-Schritt Anleitung]
+```
+
+### 3. API Reference
+```
+## Funktionen/Methoden
+
+### function_name(parameters)
+**Beschreibung:** Was macht diese Funktion?
+**Parameter:** 
+- param1 (Type): Beschreibung
+- param2 (Type, optional): Beschreibung
+
+**Returns:** Return-Type - Beschreibung
+**Throws:** Exception-Types - Wann werden sie geworfen?
+
+**Beispiel:**
+```code
+[Praktisches Beispiel]
+```
+```
+
+### 4. Konfiguration
+```yaml
+# Konfigurationsdatei Beispiel
+configuration:
+  option1: value1  # Beschreibung
+  option2: value2  # Beschreibung
+  
+# Umgebungsvariablen
+ENV_VAR_1=value  # Beschreibung
+ENV_VAR_2=value  # Beschreibung
+```
+
+### 5. Use Cases & Examples
+- **Common Scenarios:** Typische Anwendungsfälle
+- **Advanced Usage:** Erweiterte Nutzungsszenarien
+- **Integration Examples:** Zusammenspiel mit anderen Komponenten
+
+### 6. Troubleshooting
+| Problem | Symptom | Lösung |
+|---------|---------|--------|
+| [Problem 1] | [Fehlermeldung/Verhalten] | [Lösungsschritte] |
+| [Problem 2] | [Fehlermeldung/Verhalten] | [Lösungsschritte] |
+
+### 7. Architecture & Design
+- **System Overview:** Architektur-Diagramm
+- **Data Flow:** Wie fließen Daten durch das System?
+- **Dependencies:** Externe Abhängigkeiten
+
+## 🎯 Dokumentations-Qualität:
+
+### ✅ Accessibility
+- **Multiple Languages:** Deutsch/Englisch Support
+- **Clear Structure:** Logische Hierarchie
+- **Search-Friendly:** Gute Keywords und Tags
+
+### 🔄 Maintainability
+- **Versioning:** Klare Versions-Zuordnung
+- **Change Log:** Was hat sich geändert?
+- **Update Process:** Wie wird Dokumentation aktuell gehalten?
+
+### 📱 User Experience
+- **Progressive Disclosure:** Von einfach zu komplex
+- **Code Examples:** Ausführbare Beispiele
+- **Visual Aids:** Diagramme und Screenshots wo hilfreich
+
+## 📋 Content Guidelines:
+
+### 📝 Writing Style
+- **Clear & Concise:** Präzise Sprache ohne Umschweife
+- **Action-Oriented:** Verwende Imperativ ("Führe aus", "Konfiguriere")
+- **Consistent Terminology:** Einheitliche Begriffe
+
+### 🎨 Formatting
+- **Code Blocks:** Syntax-Highlighting
+- **Callouts:** Important/Warning/Tip Boxes
+- **Lists:** Strukturierte Information
+
+### 🔗 Cross-References
+- **Internal Links:** Verweise auf andere Dokumentations-Abschnitte
+- **External Resources:** Relevante externe Quellen
+- **Related Topics:** Verwandte Themen
+
+## 🌍 Internationalization:
+- **Primary Language:** Deutsch
+- **Secondary Language:** Englisch
+- **Localization:** Kulturelle Anpassungen
+
+Erstelle professionelle, benutzerfreundliche Dokumentation die sowohl für Anfänger als auch Experten wertvoll ist.
