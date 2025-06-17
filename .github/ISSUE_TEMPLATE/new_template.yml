@@ -1,0 +1,93 @@
+name: 📝 Template Contribution
+description: Teile ein neues Template für eine Programmiersprache
+title: "[TEMPLATE] "
+labels: ["template", "contribution", "community"]
+assignees:
+  - sTLAs
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fantastisch! Community-Templates sind das Herzstück von ai-collab! 💝
+        
+  - type: input
+    id: language
+    attributes:
+      label: Programmiersprache
+      description: Für welche Sprache ist das Template?
+      placeholder: "Python, JavaScript, Java, Go, Rust, etc."
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: template-type
+    attributes:
+      label: Template-Typ
+      description: Was für ein Template ist das?
+      options:
+        - 🐛 Bug Fix Template
+        - 📝 Code Review Template
+        - ✨ Feature Development Template
+        - ⚡ Performance Optimization Template
+        - 📚 Documentation Template
+        - 🧪 Testing Template
+        - 🔐 Security Audit Template
+        - 🎨 Refactoring Template
+        - 🔧 DevOps Template
+        - 🌐 API Development Template
+    validations:
+      required: true
+      
+  - type: textarea
+    id: template-content
+    attributes:
+      label: Template-Inhalt
+      description: Füge dein Template hier ein
+      render: markdown
+      placeholder: |
+        Entwickle folgendes Python-Feature: ${PROMPT}
+        
+        ## 🐍 Python-spezifische Anforderungen:
+        - Verwende Type Hints
+        - Folge PEP 8 Stil-Guide
+        - Implementiere Error Handling
+        ...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Anwendungsfall
+      description: Wann und wie sollte dieses Template verwendet werden?
+      placeholder: "Dieses Template ist perfekt für..."
+    validations:
+      required: true
+      
+  - type: textarea
+    id: example
+    attributes:
+      label: Beispiel-Prompt
+      description: Zeige ein Beispiel, wie das Template verwendet wird
+      placeholder: |
+        Eingabe: "Add user authentication to FastAPI app"
+        Erwartete Ausgabe: Vollständige Auth-Implementation mit JWT, Password-Hashing, etc.
+      
+  - type: input
+    id: cost-savings
+    attributes:
+      label: Geschätzte Kostenersparnis
+      description: Wie viel % Kosten/Zeit spart dieses Template?
+      placeholder: "60% weniger Tokens, 40% schnellere Entwicklung"
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checkliste
+      options:
+        - label: Ich habe das Template getestet
+          required: true
+        - label: Das Template folgt ai-collab Best Practices
+          required: true
+        - label: Ich erlaube die Verwendung unter MIT-Lizenz
+          required: true

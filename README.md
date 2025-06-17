@@ -144,6 +144,25 @@ cd /pfad/zu/deinem/projekt
 ./core/src/ai-collab.sh optimize "Wo war ich stehengeblieben?" simple_fix
 ```
 
+### 6️⃣ GitHub-Integration (Neu in v2.1.0!)
+
+```bash
+# GitHub CLI einrichten (einmalig)
+./core/src/ai-collab.sh github init
+
+# Auto-commit und push
+./core/src/ai-collab.sh github commit "Feature hinzugefügt"
+
+# GitHub Release mit Session-Statistiken
+./core/src/ai-collab.sh release v2.1.0 "GitHub Integration"
+
+# Issue erstellen aus AI-Session
+./core/src/ai-collab.sh github issue "Bug Title" "AI-analyzed description" "bug"
+
+# Pull Request aus Feature-Branch
+./core/src/ai-collab.sh github pr "Feature Title" "AI-generated summary"
+```
+
 ## ⚡ Quick Start (Für Eilige)
 
 ```bash

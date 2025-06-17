@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Dokumentation
+    url: https://github.com/sTLAs/ai-collab/blob/master/README.md
+    about: Vollständige Nutzungsanleitung und FAQ
+  - name: 💬 Diskussion
+    url: https://github.com/sTLAs/ai-collab/discussions
+    about: Fragen stellen, Ideen diskutieren, Community-Chat
+  - name: 🚀 Roadmap
+    url: https://github.com/sTLAs/ai-collab/projects
+    about: Entwicklungsroadmap und geplante Features

@@ -476,6 +476,60 @@ EOF
     echo -e "${CYAN}📝 Datei: $template_file${NC}"
 }
 
+# GitHub-Integration
+integrate_github() {
+    local action="$1"
+    shift
+    
+    # GitHub-Integration-Skript aufrufen
+    local github_script="$CORE_DIR/src/github-integration.sh"
+    if [ -f "$github_script" ]; then
+        "$github_script" "$action" "$@"
+    else
+        echo -e "${RED}❌ GitHub-Integration nicht gefunden${NC}"
+        return 1
+    fi
+}
+
+# Auto-Release mit Session-Daten
+auto_release() {
+    local version="$1"
+    local title="$2"
+    
+    if [ -z "$version" ]; then
+        echo -e "${RED}❌ Version erforderlich${NC}"
+        echo "Usage: $0 release <version> [title]"
+        return 1
+    fi
+    
+    if [ -z "$title" ]; then
+        title="$version: AI-assisted development update"
+    fi
+    
+    echo -e "${BLUE}=== AI-COLLAB AUTO-RELEASE ===${NC}"
+    
+    # Session-Statistiken für Release-Notes
+    local session_stats=""
+    if [ -f "$DEV_DIR/usage_analytics.json" ]; then
+        local total_operations=$(jq -r '.total_operations // 0' "$DEV_DIR/usage_analytics.json")
+        local total_cost=$(jq -r '.total_cost // 0' "$DEV_DIR/usage_analytics.json")
+        local template_usage=$(jq -r '.optimization_stats.template_reuse // 0' "$DEV_DIR/usage_analytics.json")
+        
+        session_stats="## 📊 Development Stats
+
+- **Operations**: $total_operations AI-assistierte Operationen
+- **Kosten**: \$${total_cost} Gesamtkosten
+- **Template-Nutzung**: $template_usage mal wiederverwendet
+- **Entwickelt mit**: ai-collab Session-Management"
+    fi
+    
+    # Auto-Commit aktueller Änderungen
+    integrate_github "commit" "$title" "true"
+    
+    # Release erstellen
+    integrate_github "release" "$version" "$title" "$session_stats"
+}
+
 # Hauptprogramm
 case "${1:-help}" in
     "init")
@@ -496,6 +550,12 @@ case "${1:-help}" in
     "create-template")
         create_template "$2" "$3"
         ;;
+    "github")
+        integrate_github "$2" "$3" "$4" "$5" "$6"
+        ;;
+    "release")
+        auto_release "$2" "$3"
+        ;;
     "config")
         echo -e "${CYAN}Konfigurationsdatei öffnen:${NC}"
         echo "$CONFIG_DIR/settings.json"
@@ -510,6 +570,8 @@ case "${1:-help}" in
         echo "  status                         - Aktuellen Status anzeigen"
         echo "  add-project <path> [name]      - Projekt hinzufügen"
         echo "  create-template <name> [type]  - Neues Template erstellen"
+        echo "  github <action> [args...]      - GitHub Integration"
+        echo "  release <version> [title]      - Auto-Release mit Session-Stats"
         echo "  config                         - Konfiguration anzeigen"
         echo "  help                           - Diese Hilfe"
         echo ""
@@ -519,6 +581,9 @@ case "${1:-help}" in
         echo "  $0 optimize \"Fix login bug\" bug_fix high"
         echo "  $0 add-project /path/to/project MyProject"
         echo "  $0 create-template code-review code_review"
+        echo "  $0 github init                    # GitHub CLI einrichten"
+        echo "  $0 github commit \"New feature\"   # Auto-commit & push"
+        echo "  $0 release v2.1.0 \"GitHub Integration\" # Auto-release"
         ;;
     *)
         echo -e "${BLUE}ai-collab - AI Development Collaboration Assistant v$VERSION${NC}"

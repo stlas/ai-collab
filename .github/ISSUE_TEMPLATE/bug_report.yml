@@ -1,0 +1,82 @@
+name: 🐛 Bug Report
+description: Melde einen Fehler in ai-collab
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees:
+  - sTLAs
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für deinen Bug-Report! Das hilft ai-collab zu verbessern.
+        
+  - type: input
+    id: version
+    attributes:
+      label: ai-collab Version
+      description: Welche Version verwendest du?
+      placeholder: v2.0.0
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: os
+    attributes:
+      label: Betriebssystem
+      description: Auf welchem System tritt der Fehler auf?
+      options:
+        - Windows WSL2
+        - Linux
+        - macOS
+        - Windows PowerShell
+    validations:
+      required: true
+      
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Was ist passiert?
+      description: Beschreibe den Fehler so detailliert wie möglich
+      placeholder: Ich habe versucht... aber dann...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected
+    attributes:
+      label: Was hast du erwartet?
+      description: Was sollte deiner Meinung nach passieren?
+    validations:
+      required: true
+      
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Wie können wir den Fehler nachstellen?
+      placeholder: |
+        1. Führe '...' aus
+        2. Klicke auf '...'
+        3. Sehe Fehler
+    validations:
+      required: true
+      
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs/Fehlermeldungen
+      description: Füge relevante Logs oder Fehlermeldungen ein
+      render: shell
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checkliste
+      description: Bitte bestätige die folgenden Punkte
+      options:
+        - label: Ich habe die Dokumentation gelesen
+          required: true
+        - label: Ich habe nach ähnlichen Issues gesucht
+          required: true
+        - label: Ich bin bereit, bei der Lösung zu helfen
+          required: false

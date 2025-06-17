@@ -1,0 +1,100 @@
+name: ✨ Feature Request
+description: Schlage ein neues Feature für ai-collab vor
+title: "[FEATURE] "
+labels: ["enhancement", "feature-request"]
+assignees:
+  - sTLAs
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Großartig! Neue Feature-Ideen sind immer willkommen! 🚀
+        
+  - type: input
+    id: summary
+    attributes:
+      label: Feature-Zusammenfassung
+      description: Beschreibe dein Feature in einem Satz
+      placeholder: "ai-collab sollte..."
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature-Kategorie
+      description: In welchen Bereich fällt dein Feature?
+      options:
+        - 🤖 AI-Integration (Neue Modelle, Prompts)
+        - 💰 Kostenoptimierung
+        - 📊 Session-Management
+        - 🔧 GitHub-Integration
+        - 📝 Templates
+        - 🌐 Multi-Language Support
+        - 📱 User Experience
+        - 🔐 Security
+        - 📈 Analytics/Reporting
+        - 🧪 Testing
+        - 📖 Documentation
+        - 🔌 Third-party Integration
+    validations:
+      required: true
+      
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem/Motivation
+      description: Welches Problem löst dieses Feature?
+      placeholder: "Als Entwickler möchte ich... damit ich..."
+    validations:
+      required: true
+      
+  - type: textarea
+    id: solution
+    attributes:
+      label: Vorgeschlagene Lösung
+      description: Wie stellst du dir die Implementierung vor?
+      placeholder: "Das Feature könnte folgendermaßen funktionieren..."
+    validations:
+      required: true
+      
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Lösungen
+      description: Hast du andere Ansätze in Betracht gezogen?
+      
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorität
+      description: Wie wichtig ist dieses Feature für dich?
+      options:
+        - 🔥 Kritisch - Würde ai-collab revolutionieren
+        - ⚡ Hoch - Würde meine Produktivität stark steigern
+        - 📈 Medium - Wäre eine nette Verbesserung
+        - 💡 Niedrig - Nice-to-have
+    validations:
+      required: true
+      
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Anwendungsfälle
+      description: Wie würdest du das Feature verwenden?
+      placeholder: |
+        1. Ich arbeite an Projekt X und...
+        2. Beim Debugging würde ich...
+        3. Für Code-Reviews könnte ich...
+        
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checkliste
+      options:
+        - label: Ich habe nach ähnlichen Feature-Requests gesucht
+          required: true
+        - label: Ich bin bereit, bei der Entwicklung zu helfen
+          required: false
+        - label: Ich kann Beta-Testing für dieses Feature übernehmen
+          required: false
