@@ -518,6 +518,110 @@ github_setup_wizard() {
     integrate_github "init"
 }
 
+# Auto-Push zu GitHub (mit User-Confirmation)
+auto_push() {
+    echo -e "${PURPLE}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║                  AI-COLLAB AUTO-PUSH                         ║${NC}"
+    echo -e "${PURPLE}║           Automatisches GitHub Deployment                    ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    
+    # Git-Status prüfen
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo -e "${RED}❌ Kein Git-Repository gefunden${NC}"
+        return 1
+    fi
+    
+    # Änderungen anzeigen
+    local changes=$(git status --porcelain)
+    local unpushed=$(git log @{u}.. --oneline 2>/dev/null | wc -l)
+    
+    echo -e "${CYAN}📋 Aktueller Status:${NC}"
+    if [ -n "$changes" ]; then
+        echo -e "${YELLOW}  🔄 Lokale Änderungen gefunden:${NC}"
+        git status --short | sed 's/^/    /'
+    fi
+    
+    if [ "$unpushed" -gt 0 ]; then
+        echo -e "${YELLOW}  📤 $unpushed unpushed commits gefunden${NC}"
+    fi
+    
+    if [ -z "$changes" ] && [ "$unpushed" -eq 0 ]; then
+        echo -e "${GREEN}  ✅ Alles ist bereits synchronized${NC}"
+        return 0
+    fi
+    
+    echo ""
+    echo -e "${YELLOW}🚀 Was wird automatisch gemacht:${NC}"
+    if [ -n "$changes" ]; then
+        echo -e "${CYAN}  1. Git add . (alle Änderungen stagen)${NC}"
+        echo -e "${CYAN}  2. Git commit mit AI-generierter Message${NC}"
+    fi
+    echo -e "${CYAN}  3. Git push origin (aktueller Branch)${NC}"
+    echo -e "${CYAN}  4. Git push --tags (alle Tags)${NC}"
+    echo ""
+    
+    echo -e "${YELLOW}Soll der Auto-Push durchgeführt werden? (y/n): ${NC}"
+    read -r confirm
+    
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}❌ Auto-Push abgebrochen${NC}"
+        return 0
+    fi
+    
+    echo -e "${BLUE}=== AUTO-PUSH GESTARTET ===${NC}"
+    
+    # 1. Commit falls Änderungen vorhanden
+    if [ -n "$changes" ]; then
+        echo -e "${CYAN}📝 Committe Änderungen...${NC}"
+        git add .
+        
+        # AI-generierte Commit-Message
+        local commit_message="🔄 Auto-Push: Development updates
+
+📦 Updates:
+- $(echo "$changes" | wc -l) modified files
+- Auto-generated from ai-collab session
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+        
+        if git commit -m "$commit_message"; then
+            echo -e "${GREEN}✅ Commit erfolgreich${NC}"
+        else
+            echo -e "${RED}❌ Commit fehlgeschlagen${NC}"
+            return 1
+        fi
+    fi
+    
+    # 2. Push commits
+    echo -e "${CYAN}🚀 Push commits zu GitHub...${NC}"
+    if git push origin $(git branch --show-current); then
+        echo -e "${GREEN}✅ Commits erfolgreich gepusht${NC}"
+    else
+        echo -e "${RED}❌ Push fehlgeschlagen${NC}"
+        return 1
+    fi
+    
+    # 3. Push tags
+    echo -e "${CYAN}🏷️  Push tags zu GitHub...${NC}"
+    if git push origin --tags; then
+        echo -e "${GREEN}✅ Tags erfolgreich gepusht${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Tags push fehlgeschlagen (möglicherweise keine neuen Tags)${NC}"
+    fi
+    
+    echo -e "${GREEN}🎉 Auto-Push erfolgreich abgeschlossen!${NC}"
+    
+    # GitHub-Repository-URL anzeigen
+    local repo_url=$(git remote get-url origin 2>/dev/null)
+    if [[ "$repo_url" == *"github.com"* ]]; then
+        repo_url=$(echo "$repo_url" | sed 's/\.git$//' | sed 's/git@github\.com:/https:\/\/github.com\//')
+        echo -e "${CYAN}🔗 Repository: $repo_url${NC}"
+    fi
+}
+
 # Auto-Release mit Session-Daten
 auto_release() {
     local version="$1"
@@ -583,6 +687,9 @@ case "${1:-help}" in
     "github-setup")
         github_setup_wizard
         ;;
+    "auto-push")
+        auto_push
+        ;;
     "release")
         auto_release "$2" "$3"
         ;;
@@ -602,6 +709,7 @@ case "${1:-help}" in
         echo "  create-template <name> [type]  - Neues Template erstellen"
         echo "  github <action> [args...]      - GitHub Integration"
         echo "  github-setup                   - GitHub Setup Wizard (Vollautomatisch)"
+        echo "  auto-push                      - Automatischer Push zu GitHub (mit Bestätigung)"
         echo "  release <version> [title]      - Auto-Release mit Session-Stats"
         echo "  config                         - Konfiguration anzeigen"
         echo "  help                           - Diese Hilfe"
@@ -613,7 +721,8 @@ case "${1:-help}" in
         echo "  $0 add-project /path/to/project MyProject"
         echo "  $0 create-template code-review code_review"
         echo "  $0 github-setup                   # Vollautomatisches GitHub Setup"
-        echo "  $0 github commit \"New feature\"   # Auto-commit & push"
+        echo "  $0 auto-push                      # Alles zu GitHub pushen"
+        echo "  $0 github commit \"New feature\"   # Einzelner commit & push"
         echo "  $0 release v2.1.0 \"GitHub Integration\" # Auto-release"
         ;;
     *)
