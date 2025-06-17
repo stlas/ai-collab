@@ -2,6 +2,10 @@
 
 > **Entwickelt von [sTLAs](https://github.com/sTLAs) in Zusammenarbeit mit Claude AI**
 
+[![Support ai-collab](https://img.shields.io/badge/Support-Buy%20Me%20A%20Coffee-yellow.svg)](https://buymeacoffee.com/stlas)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/stlas/ai-collab.svg)](https://github.com/stlas/ai-collab/stargazers)
+
 **ai-collab** ist ein universeller KI-Entwicklungsassistent für kostenoptimierte Softwareentwicklung. Das System unterstützt beliebige Programmiersprachen und Projekte durch intelligente Modellauswahl, wiederverwendbare Template-Patterns und nahtlose Integration in bestehende Entwicklungsworkflows.
 
 ## 🚀 Features
@@ -288,6 +292,25 @@ Interface-Sprachen:
 - Deutsch (de) - Standard
 - Englisch (en) - Vollständig
 - Weitere Sprachen - Community-basiert
+
+## 💰 Unterstützung & Sponsoring
+
+ai-collab ist ein Open-Source-Projekt, das sich durch Community-Unterstützung finanziert:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Support-Buy%20Me%20A%20Coffee-yellow.svg?style=for-the-badge)](https://buymeacoffee.com/stlas)
+
+### Warum unterstützen?
+- 🚀 **Innovative KI-Development-Tools** für die Community
+- 💡 **Kostenoptimierung** für alle Entwickler
+- 🌍 **Open-Source-Philosophie** - für jeden zugänglich
+- 🔬 **Cutting-Edge-Forschung** in AI-assisted Development
+
+### Sponsoring-Möglichkeiten:
+- ☕ **Buy Me A Coffee** - Einmalige Unterstützung
+- 🎯 **GitHub Sponsors** - Monatliche Unterstützung (coming soon)
+- 🏢 **Enterprise-Partnership** - Individuelle Kooperationen
+
+**Jeder Beitrag hilft dabei, ai-collab weiterzuentwickeln und für alle kostenlos zu halten!**
 
 ## 🤝 Beitragen
 
