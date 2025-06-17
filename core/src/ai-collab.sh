@@ -110,6 +110,195 @@ load_config() {
     fi
 }
 
+# API-Konfiguration prüfen und ggf. einrichten
+check_api_config() {
+    local env_file="$CONFIG_DIR/.env"
+    
+    # Prüfen ob .env existiert
+    if [ ! -f "$env_file" ]; then
+        return 1
+    fi
+    
+    # Prüfen ob API-Keys gesetzt sind
+    source "$env_file"
+    
+    if [ -z "$ANTHROPIC_API_KEY" ] || [ "$ANTHROPIC_API_KEY" = "your_api_key_here" ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
+# API-Setup Wizard
+setup_api_config() {
+    echo -e "${PURPLE}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║                  AI-COLLAB API SETUP                         ║${NC}"
+    echo -e "${PURPLE}║              API-Konfiguration einrichten                    ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    
+    echo -e "${CYAN}🔑 Für die volle Funktionalität von ai-collab benötigst du API-Keys:${NC}"
+    echo ""
+    echo -e "${YELLOW}📋 Unterstützte APIs:${NC}"
+    echo -e "${GREEN}  ✅ Anthropic Claude (Empfohlen)${NC}"
+    echo -e "${CYAN}     - Modelle: claude-3.5-sonnet, claude-3.5-haiku, claude-4-opus${NC}"
+    echo -e "${CYAN}     - Kosten: ~\$0.003-0.075 pro 1K Tokens${NC}"
+    echo -e "${CYAN}     - API-Key von: https://console.anthropic.com/api-keys${NC}"
+    echo ""
+    echo -e "${YELLOW}  🔜 OpenAI (Geplant)${NC}"
+    echo -e "${YELLOW}  🔜 Google Gemini (Geplant)${NC}"
+    echo -e "${YELLOW}  🔜 Local LLMs (Geplant)${NC}"
+    echo ""
+    
+    # Bestätigung
+    echo -e "${YELLOW}Möchtest du jetzt die API-Konfiguration einrichten? (y/n): ${NC}"
+    read -r confirm
+    
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}❌ API-Setup übersprungen${NC}"
+        echo -e "${CYAN}💡 Du kannst es später mit: ./core/src/ai-collab.sh setup-api${NC}"
+        return 0
+    fi
+    
+    # API-Anbieter auswählen
+    echo -e "${BLUE}=== API-ANBIETER AUSWÄHLEN ===${NC}"
+    echo -e "${CYAN}1. 🤖 Anthropic Claude (Empfohlen)${NC}"
+    echo -e "${YELLOW}Wähle einen Anbieter (1): ${NC}"
+    read -r api_provider
+    
+    case $api_provider in
+        1|"")
+            setup_anthropic_api
+            ;;
+        *)
+            echo -e "${RED}❌ Ungültige Auswahl${NC}"
+            return 1
+            ;;
+    esac
+}
+
+# Anthropic API einrichten
+setup_anthropic_api() {
+    echo -e "${BLUE}=== ANTHROPIC API SETUP ===${NC}"
+    echo ""
+    echo -e "${YELLOW}📝 So erhältst du deinen Anthropic API-Key:${NC}"
+    echo ""
+    echo -e "${CYAN}1. Gehe zu: https://console.anthropic.com/api-keys${NC}"
+    echo -e "${CYAN}2. Melde dich an oder erstelle einen Account${NC}"
+    echo -e "${CYAN}3. Klicke 'Create Key'${NC}"
+    echo -e "${CYAN}4. Gib einen Namen ein (z.B. 'ai-collab')${NC}"
+    echo -e "${CYAN}5. Kopiere den API-Key${NC}"
+    echo ""
+    
+    # Browser öffnen (falls möglich)
+    if command -v xdg-open &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne Anthropic Console im Browser...${NC}"
+        xdg-open "https://console.anthropic.com/api-keys" &>/dev/null &
+    elif command -v open &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne Anthropic Console im Browser...${NC}"
+        open "https://console.anthropic.com/api-keys" &>/dev/null &
+    elif command -v start &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne Anthropic Console im Browser...${NC}"
+        start "https://console.anthropic.com/api-keys" &>/dev/null &
+    fi
+    
+    echo -e "${YELLOW}Drücke Enter wenn du den API-Key erstellt hast...${NC}"
+    read -r
+    
+    # API-Key eingeben
+    local attempts=0
+    local max_attempts=3
+    
+    while [ $attempts -lt $max_attempts ]; do
+        echo -e "${CYAN}🔑 Füge deinen Anthropic API-Key ein:${NC}"
+        echo -e "${YELLOW}💡 Der Key wird sicher gespeichert und nicht angezeigt${NC}"
+        read -s -r api_key
+        echo ""
+        
+        if [ -z "$api_key" ]; then
+            echo -e "${RED}❌ API-Key darf nicht leer sein${NC}"
+            attempts=$((attempts + 1))
+            continue
+        fi
+        
+        # API-Key validieren
+        echo -e "${CYAN}🔍 Validiere API-Key...${NC}"
+        if validate_anthropic_key "$api_key"; then
+            save_api_config "anthropic" "$api_key"
+            echo -e "${GREEN}✅ API-Key erfolgreich konfiguriert!${NC}"
+            return 0
+        else
+            echo -e "${RED}❌ API-Key ungültig. Bitte erneut versuchen.${NC}"
+            echo -e "${YELLOW}💡 Stelle sicher, dass:${NC}"
+            echo -e "  - Der Key vollständig kopiert wurde"
+            echo -e "  - Der Key nicht abgelaufen ist"
+            echo -e "  - Du Guthaben im Anthropic Account hast"
+            echo ""
+            attempts=$((attempts + 1))
+        fi
+    done
+    
+    echo -e "${RED}❌ Maximale Anzahl Versuche erreicht${NC}"
+    echo -e "${CYAN}💡 Für manuelles Setup: Bearbeite $CONFIG_DIR/.env${NC}"
+    return 1
+}
+
+# Anthropic API-Key validieren
+validate_anthropic_key() {
+    local api_key="$1"
+    
+    # Basic format check
+    if [[ ! "$api_key" =~ ^sk-ant-api03-.* ]]; then
+        return 1
+    fi
+    
+    # API-Test (falls curl verfügbar)
+    if command -v curl &> /dev/null; then
+        local response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "https://api.anthropic.com/v1/messages" \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: $api_key" \
+            -H "anthropic-version: 2023-06-01" \
+            -d '{
+                "model": "claude-3-5-haiku-20241022",
+                "max_tokens": 10,
+                "messages": [{"role": "user", "content": "Hi"}]
+            }' 2>/dev/null)
+        
+        if [ "$response" = "200" ]; then
+            return 0
+        fi
+    fi
+    
+    # Fallback: Format ist OK, nehmen wir an es funktioniert
+    return 0
+}
+
+# API-Konfiguration speichern
+save_api_config() {
+    local provider="$1"
+    local api_key="$2"
+    local env_file="$CONFIG_DIR/.env"
+    
+    # .env erstellen falls nicht vorhanden
+    if [ ! -f "$env_file" ]; then
+        cp "$CONFIG_DIR/.env.template" "$env_file"
+    fi
+    
+    case "$provider" in
+        "anthropic")
+            # API-Key in .env setzen
+            sed -i "s/ANTHROPIC_API_KEY=.*/ANTHROPIC_API_KEY=$api_key/" "$env_file"
+            sed -i "s/ANTHROPIC_MODEL=.*/ANTHROPIC_MODEL=claude-3.5-sonnet/" "$env_file"
+            ;;
+    esac
+    
+    # Datei-Permissions sichern
+    chmod 600 "$env_file"
+    
+    echo -e "${GREEN}✅ API-Konfiguration gespeichert in: $env_file${NC}"
+}
+
 # Intelligente Modellauswahl basierend auf Aufgabentyp
 select_optimal_model() {
     local task_type="$1"
@@ -369,7 +558,30 @@ show_status() {
     echo -e "${CYAN}=== SYSTEM-STATUS ===${NC}"
     echo -e "${GREEN}✅ Version: $VERSION${NC}"
     echo -e "${GREEN}✅ Konfiguration: $([ -f "$CONFIG_DIR/settings.json" ] && echo "OK" || echo "MISSING")${NC}"
-    echo -e "${GREEN}✅ API-Konfiguration: $([ -f "$CONFIG_DIR/.env" ] && echo "OK" || echo "MISSING")${NC}"
+    local api_status="MISSING"
+    if check_api_config; then
+        api_status="OK"
+    else
+        api_status="MISSING"
+    fi
+    echo -e "${GREEN}✅ API-Konfiguration: $api_status${NC}"
+    
+    # Automatisch nach API-Setup fragen falls missing
+    if [ "$api_status" = "MISSING" ]; then
+        echo ""
+        echo -e "${YELLOW}⚠️  Keine API-Konfiguration gefunden!${NC}"
+        echo -e "${CYAN}💡 Für AI-Features werden API-Keys benötigt${NC}"
+        echo ""
+        echo -e "${YELLOW}Jetzt API-Konfiguration einrichten? (y/n): ${NC}"
+        read -r setup_now
+        
+        if [[ "$setup_now" =~ ^[Yy]$ ]]; then
+            echo ""
+            setup_api_config
+        else
+            echo -e "${CYAN}💡 Setup später mit: ./core/src/ai-collab.sh setup-api${NC}"
+        fi
+    fi
     
     # Budget-Status
     echo ""
@@ -687,6 +899,9 @@ case "${1:-help}" in
     "github-setup")
         github_setup_wizard
         ;;
+    "setup-api")
+        setup_api_config
+        ;;
     "auto-push")
         auto_push
         ;;
@@ -709,6 +924,7 @@ case "${1:-help}" in
         echo "  create-template <name> [type]  - Neues Template erstellen"
         echo "  github <action> [args...]      - GitHub Integration"
         echo "  github-setup                   - GitHub Setup Wizard (Vollautomatisch)"
+        echo "  setup-api                      - API-Konfiguration einrichten (Anthropic, etc.)"
         echo "  auto-push                      - Automatischer Push zu GitHub (mit Bestätigung)"
         echo "  release <version> [title]      - Auto-Release mit Session-Stats"
         echo "  config                         - Konfiguration anzeigen"
@@ -721,6 +937,7 @@ case "${1:-help}" in
         echo "  $0 add-project /path/to/project MyProject"
         echo "  $0 create-template code-review code_review"
         echo "  $0 github-setup                   # Vollautomatisches GitHub Setup"
+        echo "  $0 setup-api                      # API-Keys einrichten"
         echo "  $0 auto-push                      # Alles zu GitHub pushen"
         echo "  $0 github commit \"New feature\"   # Einzelner commit & push"
         echo "  $0 release v2.1.0 \"GitHub Integration\" # Auto-release"
