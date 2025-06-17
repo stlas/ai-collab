@@ -222,17 +222,28 @@ curl http://server:8080/api/projects/status
 - **Buchhaltung & Business-Operations** = 12.500€
 - **Puffer & Unvorhergesehenes** = 10.000€
 
-## 📊 **ROI für Investoren:**
+## 📊 **Realistische ROI-Einschätzung:**
 
-### **Conservative Scenario (Exit nach 5 Jahren):**
+### **WICHTIGER HINWEIS: Ehrliche Marktbewertung**
+*Basierend auf vergleichbaren Open-Source-Developer-Tools (Prettier, ESLint, Webpack):*
+- **99%** der Dev-Tools erreichen nie signifikante Revenue
+- **Successful Tools:** 5-10 Jahre bis nachhaltiges Business
+- **Typical Revenue:** 100K-1M€/Jahr nach 3-5 Jahren
+- **Exit-Wahrscheinlichkeit:** 5-15% (nicht 80%+)
+
+### **Realistic Scenario (Wahrscheinlichkeit: 60%):**
 - **Investment:** 250.000€ (für 20% Equity)
-- **Company Valuation bei Exit:** 100 Mio. €
-- **Investor Return:** 20 Mio. € → **80x ROI**
+- **Company Valuation bei Exit:** 5-20 Mio. €
+- **Investor Return:** 1-4 Mio. € → **4-16x ROI**
 
-### **Optimistic Scenario (IPO/Strategic Sale):**
-- **Vergleichbare Unternehmen:** GitHub (7,5 Mrd.), Figma (20 Mrd.)
-- **ai-collab Potenzial:** 1-5 Mrd. € (bei 1% Marktanteil)
-- **Investor Return:** 200+ Mio. € → **800x+ ROI**
+### **Optimistic Scenario (Wahrscheinlichkeit: 15%):**
+- **Vergleichbare Erfolge:** GitLab (15 Mrd.), Docker (1,3 Mrd.)
+- **ai-collab Potenzial:** 50-200 Mio. € (bei 0,1% Marktanteil)
+- **Investor Return:** 10-40 Mio. € → **40-160x ROI**
+
+### **Failure Scenario (Wahrscheinlichkeit: 25%):**
+- **Bleibt Community-Projekt** ohne signifikante Monetarisierung
+- **Investor Return:** 0€ → **Total Loss**
 
 ---
 
