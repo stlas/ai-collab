@@ -1,0 +1,29 @@
+{
+  "session_id": "csv2actual_test",
+  "start_time": "2025-06-16T22:25:45+02:00",
+  "project_context": "CSV2Actual Development Test",
+  "status": "active",
+  "parameters": {
+    "model": "claude-3.5-sonnet",
+    "optimization_level": "high",
+    "cost_budget": 5,
+    "language": "de",
+    "auto_model_selection": true,
+    "template_usage": true,
+    "prompt_caching": true
+  },
+  "context": {
+    "current_task": "",
+    "recent_operations": [],
+    "knowledge_base": {},
+    "custom_rules": []
+  },
+  "statistics": {
+    "operations_count": 0,
+    "total_cost": 0,
+    "tokens_used": 0,
+    "templates_used": 0,
+    "models_used": {}
+  },
+  "snapshots": []
+}

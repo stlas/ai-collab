@@ -1,0 +1,5 @@
+total 0
+drwxrwxrwx 1 stlas stlas 4096 Jun 17 12:38 .
+drwxrwxrwx 1 stlas stlas 4096 Jun 17 16:35 ..
+lrwxrwxrwx 1 stlas stlas   49 Jun 17 12:38 ai-collab -> /mnt/a/Dokumente/Entwicklung/Powershell/ai-collab
+lrwxrwxrwx 1 stlas stlas   50 Jun 16 22:01 csv2actual -> /mnt/a/Dokumente/Entwicklung/Powershell/CSV2Actual

@@ -1,0 +1,33 @@
+{
+  "session_id": "csv2actual_productive",
+  "start_time": "2025-06-16T23:01:11+02:00",
+  "project_context": "CSV2Actual Production Development",
+  "status": "active",
+  "parameters": {
+    "model": "claude-3.5-sonnet",
+    "optimization_level": "high",
+    "cost_budget": "3.00",
+    "language": "de",
+    "auto_model_selection": true,
+    "template_usage": true,
+    "prompt_caching": true
+  },
+  "context": {
+    "current_task": "Reusability Analysis - Smart Cleanup with Component Preservation",
+    "recent_operations": [],
+    "knowledge_base": {},
+    "custom_rules": [],
+    "snapshot_status": "Complete backup created: 2025-06-16_23:16:36 - 45 PS files, 4574 lines in main script, Git: 10 modified files",
+    "audit_findings": "CRITICAL: Debug files cleanup needed (11 files), hardcoded outputs in 29 files, multilingual system complete, cross-platform partially optimized"
+  },
+  "statistics": {
+    "operations_count": 0,
+    "total_cost": 0,
+    "tokens_used": 0,
+    "templates_used": 0,
+    "models_used": {}
+  },
+  "snapshots": [
+    "csv2actual_full_backup_20250616_231534"
+  ]
+}
