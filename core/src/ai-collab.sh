@@ -188,8 +188,13 @@ track_costs() {
 start_session() {
     echo -e "${CYAN}🤖 Starte AI-Collab Session v$VERSION...${NC}"
     
-    # Initialisierung
-    init_local_structure
+    # Auto-Initialisierung falls nötig
+    if [ ! -f "$CONFIG_DIR/settings.json" ]; then
+        echo -e "${YELLOW}⚠️  Erste Nutzung erkannt - initialisiere System...${NC}"
+        init_local_structure
+    fi
+    
+    # Konfiguration laden
     load_config
     
     # Session-ID generieren
@@ -214,6 +219,15 @@ start_session() {
     
     echo -e "${GREEN}✅ Session $session_id gestartet${NC}"
     echo -e "${BLUE}💡 Verwende 'ai-collab.sh optimize <prompt>' für kostenoptimierte Entwicklung${NC}"
+    
+    # Letzte Session wiederherstellen falls vorhanden
+    if [ -d "$SESSIONS_DIR" ] && [ "$(ls -A "$SESSIONS_DIR" 2>/dev/null)" ]; then
+        local last_session=$(find "$SESSIONS_DIR" -name "*.json" -type f | sort -r | head -1 | basename | sed 's/.json$//')
+        if [ -n "$last_session" ] && [ "$last_session" != "$session_id" ]; then
+            echo -e "${CYAN}🔄 Letzte Session gefunden: $last_session${NC}"
+            echo -e "${CYAN}💡 Zum Wiederherstellen: 'session-manager.sh restore $last_session'${NC}"
+        fi
+    fi
 }
 
 # Prompt-Optimierung mit intelligenter Modellwahl

@@ -1,0 +1,47 @@
+GitHub Authentication Setup für ai-collab:
+
+1. PERSONAL ACCESS TOKEN:
+   - GitHub.com → Settings → Developer settings → Personal access tokens
+   - Generate new token (classic)
+   - Scope: 'repo' auswählen
+   - Token kopieren\!
+
+2. GIT REMOTE KONFIGURATION:
+   Aktuell: https://github.com/stlas/ai-collab.git
+   
+3. AUTHENTICATION OPTIONEN:
+   Option A: Token als Passwort verwenden
+   Option B: SSH-Keys einrichten  
+   Option C: GitHub CLI verwenden
+
+4. BEFEHLE:
+   # Repository muss erst auf GitHub erstellt werden\!
+   # Dann: git push -u origin master
+   # Username: stlas
+   # Password: [IHR_PERSONAL_ACCESS_TOKEN]
+
+
+SSH-Key Setup für GitHub (Alternative):
+
+1. SSH-KEY GENERIEREN:
+   ssh-keygen -t ed25519 -C 'stlas1967@gmail.com'
+   # Enter für Standard-Pfad
+   # Passphrase optional
+
+2. PUBLIC KEY ANZEIGEN:
+   cat ~/.ssh/id_ed25519.pub
+
+3. GITHUB SSH-KEY HINZUFÜGEN:
+   GitHub → Settings → SSH and GPG keys → New SSH key
+   Paste the public key
+
+4. REMOTE URL ÄNDERN:
+   git remote set-url origin git@github.com:stlas/ai-collab.git
+
+5. TESTEN:
+   ssh -T git@github.com
+
+6. PUSH:
+   git push -u origin master
+
+
