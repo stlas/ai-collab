@@ -24,20 +24,55 @@ GITHUB_CONFIG="$CONFIG_DIR/github.json"
 
 # GitHub CLI Installation prüfen
 check_github_cli() {
+    echo -e "${BLUE}=== GITHUB CLI STATUS ===${NC}"
+    
+    # 1. GitHub CLI Installation prüfen
     if ! command -v gh &> /dev/null; then
-        echo -e "${YELLOW}⚠️  GitHub CLI nicht gefunden. Installiere...${NC}"
-        install_github_cli
-        return $?
+        echo -e "${YELLOW}⚠️  GitHub CLI nicht gefunden${NC}"
+        echo -e "${CYAN}🔧 Automatische Installation wird gestartet...${NC}"
+        
+        if install_github_cli; then
+            echo -e "${GREEN}✅ GitHub CLI erfolgreich installiert${NC}"
+        else
+            echo -e "${RED}❌ GitHub CLI Installation fehlgeschlagen${NC}"
+            echo -e "${YELLOW}💡 Manuelle Installation: https://cli.github.com/manual/installation${NC}"
+            return 1
+        fi
+    else
+        local gh_version=$(gh --version | head -n1)
+        echo -e "${GREEN}✅ GitHub CLI gefunden: $gh_version${NC}"
     fi
     
-    # Authentication prüfen
+    # 2. Authentication prüfen
     if ! gh auth status &>/dev/null; then
         echo -e "${YELLOW}⚠️  GitHub CLI nicht authentifiziert${NC}"
-        setup_github_auth
-        return $?
+        echo -e "${CYAN}🔐 Automatisches Authentication-Setup wird gestartet...${NC}"
+        echo ""
+        
+        if setup_github_auth; then
+            echo -e "${GREEN}✅ GitHub Authentication erfolgreich eingerichtet${NC}"
+        else
+            echo -e "${RED}❌ GitHub Authentication fehlgeschlagen${NC}"
+            return 1
+        fi
+    else
+        local username=$(gh api user --jq '.login' 2>/dev/null || echo "unknown")
+        echo -e "${GREEN}✅ GitHub Authentication OK - Angemeldet als: $username${NC}"
     fi
     
-    echo -e "${GREEN}✅ GitHub CLI bereit${NC}"
+    # 3. Repository-Kontext prüfen
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        local repo_url=$(git remote get-url origin 2>/dev/null || echo "no-remote")
+        if [[ "$repo_url" == *"github.com"* ]]; then
+            echo -e "${GREEN}✅ GitHub Repository erkannt${NC}"
+        else
+            echo -e "${YELLOW}⚠️  Kein GitHub Repository - lokale Entwicklung${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Kein Git Repository - initialisiere falls nötig${NC}"
+    fi
+    
+    echo -e "${GREEN}🚀 GitHub CLI vollständig eingerichtet und bereit!${NC}"
     return 0
 }
 
@@ -94,34 +129,217 @@ install_github_cli() {
 setup_github_auth() {
     echo -e "${BLUE}=== GITHUB AUTHENTICATION ===${NC}"
     
-    echo -e "${CYAN}🔐 GitHub CLI Authentication wird gestartet...${NC}"
-    echo -e "${YELLOW}💡 Wähle 'HTTPS' und 'Login with a browser' für die einfachste Einrichtung${NC}"
-    
-    gh auth login
-    
+    # Prüfen ob bereits authentifiziert
     if gh auth status &>/dev/null; then
-        echo -e "${GREEN}✅ GitHub Authentication erfolgreich${NC}"
-        
-        # GitHub-Konfiguration speichern
+        echo -e "${GREEN}✅ Bereits bei GitHub angemeldet${NC}"
         local username=$(gh api user --jq '.login')
-        local email=$(gh api user --jq '.email // "noreply@github.com"')
-        
-        jq -n \
-            --arg username "$username" \
-            --arg email "$email" \
-            '{
-                username: $username,
-                email: $email,
-                auth_setup: true,
-                setup_date: now
-            }' > "$GITHUB_CONFIG"
-            
         echo -e "${CYAN}👤 Angemeldet als: $username${NC}"
         return 0
+    fi
+    
+    echo -e "${CYAN}🔐 GitHub Authentication Setup wird gestartet...${NC}"
+    echo ""
+    echo -e "${YELLOW}📋 Es gibt mehrere Optionen:${NC}"
+    echo -e "${CYAN}1. 🌐 Browser-Login (Empfohlen) - Einfach und sicher${NC}"
+    echo -e "${CYAN}2. 🔑 Personal Access Token - Für Server/Automation${NC}"
+    echo -e "${CYAN}3. 📱 GitHub App - Für Organisationen${NC}"
+    echo ""
+    
+    # Benutzer-Eingabe mit Timeout für Automation
+    local timeout_seconds=5
+    local auth_choice=""
+    
+    echo -e "${YELLOW}Wähle eine Option (1-3): ${NC}"
+    
+    # Timeout für automatisierte Ausführung
+    if read -t $timeout_seconds -r auth_choice; then
+        # Eingabe erhalten
+        case $auth_choice in
+            1)
+                echo -e "${CYAN}🌐 Browser-Login ausgewählt${NC}"
+                setup_browser_auth
+                return $?
+                ;;
+            2)
+                echo -e "${CYAN}🔑 Personal Access Token ausgewählt${NC}"
+                setup_token_auth
+                return $?
+                ;;
+            3)
+                echo -e "${CYAN}📱 GitHub App ausgewählt${NC}"
+                setup_app_auth
+                return $?
+                ;;
+            *)
+                echo -e "${RED}❌ Ungültige Auswahl. Standard-Option wird verwendet.${NC}"
+                echo -e "${CYAN}🔧 Überspringe automatisches Setup - manueller Start erforderlich${NC}"
+                echo -e "${YELLOW}💡 Verwende: ./core/src/ai-collab.sh github-setup${NC}"
+                return 1
+                ;;
+        esac
     else
-        echo -e "${RED}❌ GitHub Authentication fehlgeschlagen${NC}"
+        # Timeout - automatisierte Ausführung
+        echo -e "${YELLOW}⏱️  Timeout - automatisierte Ausführung erkannt${NC}"
+        echo -e "${CYAN}🔧 Überspringe automatisches Setup - manueller Start erforderlich${NC}"
+        echo -e "${YELLOW}💡 Für manuelle Einrichtung: ./core/src/ai-collab.sh github-setup${NC}"
         return 1
     fi
+}
+
+# Browser-basierte Authentication
+setup_browser_auth() {
+    echo -e "${BLUE}=== BROWSER-LOGIN ===${NC}"
+    echo -e "${CYAN}🌐 Öffnet automatisch deinen Browser für GitHub-Login${NC}"
+    echo -e "${YELLOW}💡 Wähle 'HTTPS' als Git-Protokoll${NC}"
+    echo ""
+    
+    gh auth login --web
+    
+    if gh auth status &>/dev/null; then
+        save_auth_config "browser"
+        return 0
+    else
+        echo -e "${RED}❌ Browser-Login fehlgeschlagen${NC}"
+        return 1
+    fi
+}
+
+# Token-basierte Authentication mit Anleitung
+setup_token_auth() {
+    echo -e "${BLUE}=== PERSONAL ACCESS TOKEN SETUP ===${NC}"
+    echo ""
+    echo -e "${YELLOW}📝 So erstellst du einen Personal Access Token:${NC}"
+    echo ""
+    echo -e "${CYAN}1. Öffne: https://github.com/settings/tokens${NC}"
+    echo -e "${CYAN}2. Klicke 'Generate new token' → 'Generate new token (classic)'${NC}"
+    echo -e "${CYAN}3. Setze folgende Scopes:${NC}"
+    echo -e "   ${GREEN}✅ repo${NC} (Full control of private repositories)"
+    echo -e "   ${GREEN}✅ workflow${NC} (Update GitHub Action workflows)"
+    echo -e "   ${GREEN}✅ write:packages${NC} (Upload packages to GitHub Package Registry)"
+    echo -e "   ${GREEN}✅ delete:packages${NC} (Delete packages from GitHub Package Registry)"
+    echo -e "   ${GREEN}✅ admin:org${NC} (Full control of orgs and teams, read/write org projects)"
+    echo -e "   ${GREEN}✅ admin:public_key${NC} (Full control of user public keys)"
+    echo -e "   ${GREEN}✅ admin:repo_hook${NC} (Full control of repository hooks)"
+    echo -e "   ${GREEN}✅ user${NC} (Update ALL user data)"
+    echo -e "   ${GREEN}✅ delete_repo${NC} (Delete repositories)"
+    echo -e "${CYAN}4. Klicke 'Generate token'${NC}"
+    echo -e "${CYAN}5. Kopiere den Token (nur einmal sichtbar!)${NC}"
+    echo ""
+    
+    # Browser öffnen (falls möglich)
+    if command -v xdg-open &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne GitHub Token-Seite im Browser...${NC}"
+        xdg-open "https://github.com/settings/tokens" &>/dev/null &
+    elif command -v open &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne GitHub Token-Seite im Browser...${NC}"
+        open "https://github.com/settings/tokens" &>/dev/null &
+    elif command -v start &> /dev/null; then
+        echo -e "${YELLOW}🌐 Öffne GitHub Token-Seite im Browser...${NC}"
+        start "https://github.com/settings/tokens" &>/dev/null &
+    fi
+    
+    echo -e "${YELLOW}Drücke Enter wenn du den Token erstellt hast...${NC}"
+    
+    # Timeout für automatisierte Ausführung
+    if ! read -t 5 -r; then
+        echo -e "${YELLOW}⏱️  Timeout - überspringe Token-Setup${NC}"
+        echo -e "${CYAN}💡 Für manuelle Token-Einrichtung: ./core/src/ai-collab.sh github-setup${NC}"
+        return 1
+    fi
+    
+    # Token eingeben
+    local attempts=0
+    local max_attempts=3
+    
+    while [ $attempts -lt $max_attempts ]; do
+        echo -e "${CYAN}🔑 Füge deinen Personal Access Token ein:${NC}"
+        echo -e "${YELLOW}💡 Der Token wird sicher gespeichert und nicht angezeigt${NC}"
+        
+        # Timeout für automatisierte Ausführung
+        if ! read -s -t 10 -r token; then
+            echo -e "${YELLOW}⏱️  Timeout - überspringe Token-Setup${NC}"
+            echo -e "${CYAN}💡 Für manuelle Token-Einrichtung: ./core/src/ai-collab.sh github-setup${NC}"
+            return 1
+        fi
+        echo ""
+        
+        if [ -z "$token" ]; then
+            echo -e "${RED}❌ Token darf nicht leer sein${NC}"
+            attempts=$((attempts + 1))
+            continue
+        fi
+        
+        # Token validieren
+        echo -e "${CYAN}🔍 Validiere Token...${NC}"
+        if echo "$token" | gh auth login --with-token; then
+            save_auth_config "token"
+            return 0
+        else
+            echo -e "${RED}❌ Token ungültig. Bitte erneut versuchen.${NC}"
+            echo -e "${YELLOW}💡 Stelle sicher, dass:${NC}"
+            echo -e "  - Der Token vollständig kopiert wurde"
+            echo -e "  - Alle erforderlichen Scopes gesetzt sind"
+            echo -e "  - Der Token nicht abgelaufen ist"
+            echo ""
+            attempts=$((attempts + 1))
+        fi
+    done
+    
+    echo -e "${RED}❌ Maximale Anzahl Versuche erreicht${NC}"
+    echo -e "${CYAN}💡 Für manuelle Token-Einrichtung: ./core/src/ai-collab.sh github-setup${NC}"
+    return 1
+}
+
+# GitHub App Authentication
+setup_app_auth() {
+    echo -e "${BLUE}=== GITHUB APP AUTHENTICATION ===${NC}"
+    echo -e "${CYAN}📱 GitHub App Login für Organisationen${NC}"
+    echo -e "${YELLOW}💡 Wähle 'HTTPS' als Git-Protokoll${NC}"
+    echo ""
+    
+    gh auth login --git-protocol https --web
+    
+    if gh auth status &>/dev/null; then
+        save_auth_config "app"
+        return 0
+    else
+        echo -e "${RED}❌ GitHub App Login fehlgeschlagen${NC}"
+        return 1
+    fi
+}
+
+# Authentifizierungs-Konfiguration speichern
+save_auth_config() {
+    local auth_method="$1"
+    
+    # Benutzerinformationen abrufen
+    local username=$(gh api user --jq '.login')
+    local email=$(gh api user --jq '.email // "noreply@github.com"')
+    local name=$(gh api user --jq '.name // .login')
+    
+    # Git-Konfiguration setzen
+    git config --global user.name "$name"
+    git config --global user.email "$email"
+    
+    # ai-collab Konfiguration speichern
+    mkdir -p "$CONFIG_DIR"
+    jq -n \
+        --arg username "$username" \
+        --arg email "$email" \
+        --arg name "$name" \
+        --arg method "$auth_method" \
+        '{
+            username: $username,
+            email: $email,
+            name: $name,
+            auth_method: $method,
+            auth_setup: true,
+            setup_date: now
+        }' > "$GITHUB_CONFIG"
+    
+    echo -e "${GREEN}✅ GitHub Authentication erfolgreich${NC}"
+    echo -e "${CYAN}👤 Angemeldet als: $username ($email)${NC}"
+    echo -e "${CYAN}🔧 Git-Konfiguration automatisch gesetzt${NC}"
 }
 
 # Automatisches Commit und Push

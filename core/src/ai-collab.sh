@@ -491,6 +491,33 @@ integrate_github() {
     fi
 }
 
+# GitHub Setup Wizard
+github_setup_wizard() {
+    echo -e "${PURPLE}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║                  AI-COLLAB GITHUB SETUP                      ║${NC}"
+    echo -e "${PURPLE}║              Vollautomatische Einrichtung                    ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    
+    echo -e "${CYAN}🚀 Dieser Wizard richtet GitHub-Integration vollautomatisch ein:${NC}"
+    echo -e "${GREEN}✅ GitHub CLI Installation${NC}"
+    echo -e "${GREEN}✅ Authentication (Browser oder Token)${NC}"
+    echo -e "${GREEN}✅ Git-Konfiguration${NC}"
+    echo -e "${GREEN}✅ Repository-Verbindung${NC}"
+    echo ""
+    
+    echo -e "${YELLOW}Möchtest du fortfahren? (y/n): ${NC}"
+    read -r confirm
+    
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}❌ Setup abgebrochen${NC}"
+        return 0
+    fi
+    
+    # GitHub CLI Setup starten
+    integrate_github "init"
+}
+
 # Auto-Release mit Session-Daten
 auto_release() {
     local version="$1"
@@ -553,6 +580,9 @@ case "${1:-help}" in
     "github")
         integrate_github "$2" "$3" "$4" "$5" "$6"
         ;;
+    "github-setup")
+        github_setup_wizard
+        ;;
     "release")
         auto_release "$2" "$3"
         ;;
@@ -571,6 +601,7 @@ case "${1:-help}" in
         echo "  add-project <path> [name]      - Projekt hinzufügen"
         echo "  create-template <name> [type]  - Neues Template erstellen"
         echo "  github <action> [args...]      - GitHub Integration"
+        echo "  github-setup                   - GitHub Setup Wizard (Vollautomatisch)"
         echo "  release <version> [title]      - Auto-Release mit Session-Stats"
         echo "  config                         - Konfiguration anzeigen"
         echo "  help                           - Diese Hilfe"
@@ -581,7 +612,7 @@ case "${1:-help}" in
         echo "  $0 optimize \"Fix login bug\" bug_fix high"
         echo "  $0 add-project /path/to/project MyProject"
         echo "  $0 create-template code-review code_review"
-        echo "  $0 github init                    # GitHub CLI einrichten"
+        echo "  $0 github-setup                   # Vollautomatisches GitHub Setup"
         echo "  $0 github commit \"New feature\"   # Auto-commit & push"
         echo "  $0 release v2.1.0 \"GitHub Integration\" # Auto-release"
         ;;

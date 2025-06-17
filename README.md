@@ -147,21 +147,23 @@ cd /pfad/zu/deinem/projekt
 ### 6️⃣ GitHub-Integration (Neu in v2.1.0!)
 
 ```bash
-# GitHub CLI einrichten (einmalig)
-./core/src/ai-collab.sh github init
+# 🧙‍♂️ Vollautomatisches GitHub Setup (Empfohlen)
+./core/src/ai-collab.sh github-setup
 
-# Auto-commit und push
+# Führt automatisch durch:
+# ✅ GitHub CLI Installation
+# ✅ Authentication (Browser oder Token)  
+# ✅ Git-Konfiguration
+# ✅ Repository-Verbindung
+
+# Nach dem Setup:
 ./core/src/ai-collab.sh github commit "Feature hinzugefügt"
-
-# GitHub Release mit Session-Statistiken
 ./core/src/ai-collab.sh release v2.1.0 "GitHub Integration"
-
-# Issue erstellen aus AI-Session
 ./core/src/ai-collab.sh github issue "Bug Title" "AI-analyzed description" "bug"
-
-# Pull Request aus Feature-Branch
 ./core/src/ai-collab.sh github pr "Feature Title" "AI-generated summary"
 ```
+
+**GitHub Token wird automatisch durch das Setup erstellt** - einfach den Anweisungen folgen!
 
 ## ⚡ Quick Start (Für Eilige)
 
