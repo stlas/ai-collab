@@ -1,0 +1,65 @@
+[
+  {
+    "timestamp": "2025-06-18T12:00:00+00:00",
+    "description": "GitHub Integration Development",
+    "task_type": "feature_development",
+    "duration_minutes": 120,
+    "model": "claude-4-sonnet",
+    "estimated_cost": 0.72,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T12:17:36+00:00",
+    "description": "Test Session",
+    "task_type": "simple_fix",
+    "duration_minutes": 30,
+    "     \nmodel": "claude-3.5-haiku",
+    "estimated_cost": 0.00750000000000000000,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T12:17:47+00:00",
+    "description": "Debug Session",
+    "task_type": "simple_fix",
+    "duration_minutes": 10,
+    "     \nmodel": "claude-3.5-haiku",
+    "estimated_cost": 0.00250000000000000000,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T12:47:19+00:00",
+    "description": "Proxmox Migration Development",
+    "task_type": "architecture",
+    "duration_minutes": 180,
+    "     \nmodel": "claude-4-sonnet",
+    "estimated_cost": 1.62000000000000000000,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T12:47:19+00:00",
+    "description": "PM-System Integration",
+    "task_type": "feature_development",
+    "duration_minutes": 90,
+    "     \nmodel": "claude-4-sonnet",
+    "estimated_cost": 0.54000000000000000000,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T12:47:19+00:00",
+    "description": "Development-Cost-Tracking Implementation",
+    "task_type": "feature_development",
+    "duration_minutes": 45,
+    "     \nmodel": "claude-4-sonnet",
+    "estimated_cost": 0.27000000000000000000,
+    "session_type": "development_chat"
+  },
+  {
+    "timestamp": "2025-06-18T13:40:42+00:00",
+    "description": "GitHub Release Preparation",
+    "task_type": "feature_development",
+    "duration_minutes": 30,
+    "     \nmodel": "claude-4-sonnet",
+    "estimated_cost": 0.18000000000000000000,
+    "session_type": "development_chat"
+  }
+]

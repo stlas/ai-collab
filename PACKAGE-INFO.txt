@@ -1,0 +1,26 @@
+ai-collab Proxmox Migration Package
+==================================
+
+Erstellt: Tue Jun 17 17:05:49 CEST 2025
+Größe: 115M
+Dateien: 2831
+
+Inhalt:
+- ✅ Core ai-collab System
+- ✅ PM-System (Kanboard-Integration)  
+- ✅ Konfiguration-Templates
+- ✅ Migration-Scripts
+- ✅ Session-Daten (letzte 10)
+- ✅ Statistiken und Logs
+
+Proxmox-Container Anforderungen:
+- Ubuntu 22.04 LTS
+- 4 GB RAM
+- 32 GB Storage
+- Bridge-Netzwerk
+
+Nach Migration verfügbar:
+- Professional PM-System (Web)
+- Team-Collaboration
+- 24/7 Monitoring
+- Investor-Demo-Ready

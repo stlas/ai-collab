@@ -1,0 +1,26 @@
+{
+  "ai_providers": {
+    "anthropic": {
+      "api_key": "sk-ant-api03-XXXXX",
+      "model_preferences": {
+        "simple_fix": "claude-3.5-haiku",
+        "code_review": "claude-3.5-sonnet",
+        "architecture": "claude-4-opus"
+      }
+    },
+    "openai": {
+      "api_key": "sk-XXXXX",
+      "enabled": false
+    }
+  },
+  "github": {
+    "username": "YOUR_USERNAME",
+    "token": "ghp_XXXXX",
+    "auto_push": true
+  },
+  "cost_limits": {
+    "daily_limit": 50.0,
+    "monthly_limit": 150.0,
+    "warning_threshold": 80
+  }
+}

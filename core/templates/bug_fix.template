@@ -1,0 +1,48 @@
+Analysiere und behebe folgenden Bug systematisch: ${PROMPT}
+
+## 🔍 Bug-Analyse Workflow:
+
+### 1. Problem-Identifikation
+- **Symptom:** Was ist das beobachtete Problem?
+- **Erwartetes Verhalten:** Was sollte stattdessen passieren?
+- **Reproduktion:** Unter welchen Bedingungen tritt der Bug auf?
+
+### 2. Root-Cause-Analyse
+- **Fehler-Lokalisierung:** Wo im Code liegt das Problem?
+- **Ursachen-Hierarchie:** Direkte und indirekte Ursachen
+- **Abhängigkeiten:** Welche anderen Komponenten sind betroffen?
+
+### 3. Lösungsstrategie
+- **Lösungsansätze:** Verschiedene Reparatur-Möglichkeiten
+- **Aufwand-Nutzen:** Bewertung der Lösungsalternativen
+- **Risiko-Assessment:** Potenzielle Seiteneffekte
+
+### 4. Implementation
+```
+// Vorher (mit Bug):
+[Buggy Code hier]
+
+// Nachher (behoben):
+[Fixed Code hier]
+
+// Erklärung:
+[Warum diese Lösung das Problem behebt]
+```
+
+### 5. Validierung & Testing
+- **Unit Tests:** Teste die spezifische Fix
+- **Regression Tests:** Stelle sicher, dass nichts anderes kaputt geht
+- **Edge Cases:** Teste Grenzfälle
+
+### 6. Prävention
+- **Code-Review-Punkte:** Was hätte diesen Bug verhindert?
+- **Monitoring:** Wie kann ähnliches künftig früher erkannt werden?
+- **Dokumentation:** Was sollte dokumentiert werden?
+
+## 🎯 Fokus auf:
+- Minimale, chirurgische Eingriffe
+- Saubere, testbare Lösung
+- Keine Breaking Changes
+- Performance-Erhalt
+
+Liefere produktionsreifen Code mit ausführlichen Erklärungen.
