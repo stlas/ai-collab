@@ -4,7 +4,7 @@
 # ai-collab.sh - AI Development Collaboration Assistant
 # Intelligenter Präprozessor für kostenoptimierte KI-Entwicklung
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
