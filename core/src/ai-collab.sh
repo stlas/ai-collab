@@ -614,6 +614,190 @@ show_status() {
     fi
 }
 
+# Session starten
+start_session() {
+    echo -e "${BLUE}=== NEUE AI-SESSION STARTEN ===${NC}"
+    
+    # Session-Manager verwenden
+    if [ -f "$CORE_DIR/src/session-manager.sh" ]; then
+        "$CORE_DIR/src/session-manager.sh" init
+    else
+        echo -e "${RED}❌ Session-Manager nicht gefunden${NC}"
+        return 1
+    fi
+}
+
+# Erweiterte System-Diagnose
+show_full_status() {
+    echo -e "${PURPLE}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║                AI-COLLAB FULL DIAGNOSTIC                     ║${NC}"
+    echo -e "${PURPLE}║          Enhanced System Health Check                        ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    
+    # Basis-Status
+    load_config
+    
+    # System-Komponenten prüfen
+    echo -e "${CYAN}=== SYSTEM-KOMPONENTEN ===${NC}"
+    check_system_component() {
+        local name="$1"
+        local path="$2"
+        local type="$3"
+        
+        if [ "$type" = "file" ] && [ -f "$path" ]; then
+            local size=$(stat -c%s "$path" 2>/dev/null || echo "0")
+            echo -e "${GREEN}✅ $name: $(( $size / 1024 )) KB${NC}"
+        elif [ "$type" = "dir" ] && [ -d "$path" ]; then
+            local count=$(ls -1 "$path" 2>/dev/null | wc -l)
+            echo -e "${GREEN}✅ $name: $count Dateien${NC}"
+        else
+            echo -e "${RED}❌ $name: Nicht gefunden${NC}"
+        fi
+    }
+    
+    check_system_component "Hauptkonfiguration" "$CONFIG_DIR/settings.json" "file"
+    check_system_component "Templates" "$CORE_DIR/templates" "dir"
+    check_system_component "Session-Manager" "$CORE_DIR/src/session-manager.sh" "file"
+    check_system_component "Cost-Optimizer" "$CORE_DIR/src/cost-optimizer.sh" "file"
+    check_system_component "GitHub-Integration" "$CORE_DIR/src/github-integration.sh" "file"
+    echo ""
+    
+    # Session-Analyse
+    echo -e "${CYAN}=== SESSION-ANALYSE ===${NC}"
+    local session_dir="$DEV_DIR"
+    if [ -d "$session_dir" ]; then
+        local active_sessions=$(find "$session_dir" -name "session_*.json" | wc -l)
+        local current_session=""
+        if [ -f "$TEMP_DIR/current_session" ]; then
+            current_session=$(cat "$TEMP_DIR/current_session")
+        fi
+        
+        echo -e "${BLUE}📊 Gespeicherte Sessions: $active_sessions${NC}"
+        if [ -n "$current_session" ]; then
+            echo -e "${GREEN}🟢 Aktive Session: $current_session${NC}"
+        else
+            echo -e "${YELLOW}⚪ Keine aktive Session${NC}"
+        fi
+        
+        # Session-Statistiken
+        if [ "$active_sessions" -gt 0 ]; then
+            local total_cost=0
+            find "$session_dir" -name "session_*.json" | while read -r session_file; do
+                local cost=$(jq -r '.total_cost // 0' "$session_file" 2>/dev/null)
+                echo "  Session: $(basename "$session_file" .json) - Kosten: \$$cost"
+            done
+        fi
+    else
+        echo -e "${YELLOW}📊 Session-Verzeichnis nicht initialisiert${NC}"
+    fi
+    echo ""
+    
+    # PM-Integration Status
+    echo -e "${CYAN}=== PM-INTEGRATION ===${NC}"
+    local pm_integration_dir="$PROJECT_ROOT/integration/pm-system"
+    if [ -d "$pm_integration_dir" ]; then
+        echo -e "${GREEN}✅ PM-Integration verfügbar${NC}"
+        
+        # Export-Status prüfen
+        local export_dir="$pm_integration_dir/data-export"
+        if [ -d "$export_dir" ]; then
+            local export_files=$(ls -1 "$export_dir"/*.json 2>/dev/null | wc -l)
+            echo -e "${BLUE}📤 Export-Dateien: $export_files${NC}"
+            
+            if [ -f "$export_dir/pm_integration_status.json" ]; then
+                local last_export=$(jq -r '.export_timestamp' "$export_dir/pm_integration_status.json" 2>/dev/null)
+                echo -e "${BLUE}🕒 Letzter Export: $last_export${NC}"
+            fi
+        fi
+        
+        # PM-Datenbank prüfen
+        local pm_db="$PROJECT_ROOT/ai-collab-pm/data/db.sqlite"
+        if [ -f "$pm_db" ]; then
+            local db_size=$(stat -c%s "$pm_db" 2>/dev/null || echo "0")
+            echo -e "${GREEN}🗄️  PM-Datenbank: $(( $db_size / 1024 )) KB${NC}"
+        else
+            echo -e "${YELLOW}🗄️  PM-Datenbank nicht initialisiert${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  PM-Integration nicht gefunden${NC}"
+    fi
+    echo ""
+    
+    # API-Verbindungen testen
+    echo -e "${CYAN}=== API-TESTS ===${NC}"
+    test_api_connection() {
+        local name="$1"
+        local url="$2"
+        local timeout="${3:-5}"
+        
+        if curl -s --max-time "$timeout" "$url" >/dev/null 2>&1; then
+            echo -e "${GREEN}🌐 $name: Erreichbar${NC}"
+        else
+            echo -e "${RED}🌐 $name: Nicht erreichbar${NC}"
+        fi
+    }
+    
+    # GitHub API
+    if command -v gh >/dev/null 2>&1; then
+        if gh auth status >/dev/null 2>&1; then
+            echo -e "${GREEN}🐙 GitHub CLI: Authentifiziert${NC}"
+        else
+            echo -e "${YELLOW}🐙 GitHub CLI: Nicht authentifiziert${NC}"
+        fi
+    else
+        echo -e "${RED}🐙 GitHub CLI: Nicht installiert${NC}"
+    fi
+    
+    # Lokale PM-System API
+    test_api_connection "PM-System" "http://localhost:8080" 2
+    
+    # Anthropic API (falls konfiguriert)
+    if [ -f "$CONFIG_DIR/.env" ] && grep -q "ANTHROPIC_API_KEY" "$CONFIG_DIR/.env" 2>/dev/null; then
+        echo -e "${GREEN}🤖 Anthropic API: Konfiguriert${NC}"
+    else
+        echo -e "${YELLOW}🤖 Anthropic API: Nicht konfiguriert${NC}"
+    fi
+    echo ""
+    
+    # Budget-Übersicht erweitert
+    echo -e "${CYAN}=== ERWEITERTE BUDGET-ANALYSE ===${NC}"
+    local remaining_budget=$(get_remaining_budget)
+    echo -e "${YELLOW}💰 Tagesbudget: \$${COST_BUDGET_DAILY}${NC}"
+    echo -e "${YELLOW}💸 Verbleibend heute: \$${remaining_budget}${NC}"
+    
+    # Kosten-Tracking-Dateien prüfen
+    if [ -f "$DEV_DIR/claude_code_statistics.json" ]; then
+        echo -e "${GREEN}📊 Kosten-Tracking: Aktiv${NC}"
+    else
+        echo -e "${YELLOW}📊 Kosten-Tracking: Nicht initialisiert${NC}"
+    fi
+    echo ""
+    
+    # Template-Analyse
+    echo -e "${CYAN}=== TEMPLATE-ANALYSE ===${NC}"
+    local template_dir="$CORE_DIR/templates"
+    if [ -d "$template_dir" ]; then
+        local template_count=$(ls -1 "$template_dir"/*.template 2>/dev/null | wc -l)
+        echo -e "${GREEN}📝 Verfügbare Templates: $template_count${NC}"
+        
+        if [ "$template_count" -gt 0 ]; then
+            ls -1 "$template_dir"/*.template 2>/dev/null | while read -r template; do
+                local name=$(basename "$template" .template)
+                local size=$(stat -c%s "$template" 2>/dev/null || echo "0")
+                echo -e "${BLUE}  📄 $name: $(( $size / 1024 )) KB${NC}"
+            done
+        fi
+    else
+        echo -e "${YELLOW}📝 Template-Verzeichnis nicht gefunden${NC}"
+    fi
+    echo ""
+    
+    echo -e "${PURPLE}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${PURPLE}║                    DIAGNOSTIC COMPLETE                      ║${NC}"
+    echo -e "${PURPLE}╚══════════════════════════════════════════════════════════════╝${NC}"
+}
+
 # Template-System
 create_template() {
     local template_name="$1"
@@ -878,14 +1062,20 @@ case "${1:-help}" in
     "init")
         init_local_structure
         ;;
-    "echo "URL:"")
-        echo "URL:"_session
+    "start")
+        start_session
         ;;
     "optimize")
         optimize_prompt "$2" "$3" "$4"
         ;;
     "status")
         show_status
+        ;;
+    "diagnose"|"status-full")
+        show_full_status
+        ;;
+    "premises")
+        "$CORE_DIR/src/premises-manager.sh" "$2" "$3" "$4" "$5"
         ;;
     "add-project")
         add_project "$2" "$3"
@@ -917,9 +1107,11 @@ case "${1:-help}" in
         echo ""
         echo "Commands:"
         echo "  init                           - Initialisiere ai-collab Struktur"
-        echo "  echo "URL:"                          - Neue AI-Session starten"
+        echo "  start                          - Neue AI-Session starten"
         echo "  optimize \"<prompt>\" [type] [complexity] - Prompt optimieren"
         echo "  status                         - Aktuellen Status anzeigen"
+        echo "  diagnose                       - Vollständige System-Diagnose"
+        echo "  premises <action> [args...]    - Prämissen-Management"
         echo "  add-project <path> [name]      - Projekt hinzufügen"
         echo "  create-template <name> [type]  - Neues Template erstellen"
         echo "  github <action> [args...]      - GitHub Integration"
@@ -932,7 +1124,7 @@ case "${1:-help}" in
         echo ""
         echo "Beispiele:"
         echo "  $0 init"
-        echo "  $0 echo "URL:""
+        echo "  $0 start"
         echo "  $0 optimize \"Fix login bug\" bug_fix high"
         echo "  $0 add-project /path/to/project MyProject"
         echo "  $0 create-template code-review code_review"

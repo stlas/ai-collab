@@ -92,6 +92,29 @@ export_session_data() {
     # Statistiken exportieren
     if [ -f "$DEV_DIR/claude_code_statistics.json" ]; then
         echo -e "${CYAN}📊 Exportiere Kosten-Statistiken...${NC}"
+    
+    # Prämissen-Export hinzufügen
+    echo -e "${CYAN}🎯 Exportiere Prämissen-Evolution...${NC}"
+    if [ -f "$PROJECT_ROOT/local/development/premises/current.json" ]; then
+        cp "$PROJECT_ROOT/local/development/premises/current.json" "$DATA_EXPORT_DIR/premises_current.json"
+        echo -e "${GREEN}✅ Aktuelle Prämissen exportiert${NC}"
+        
+        # Prämissen-Snapshots
+        if [ -d "$PROJECT_ROOT/local/development/premises/snapshots" ]; then
+            mkdir -p "$DATA_EXPORT_DIR/premises_snapshots"
+            cp "$PROJECT_ROOT/local/development/premises/snapshots"/*.json "$DATA_EXPORT_DIR/premises_snapshots/" 2>/dev/null || true
+            local snapshot_count=$(ls -1 "$DATA_EXPORT_DIR/premises_snapshots"/*.json 2>/dev/null | wc -l)
+            echo -e "${GREEN}✅ $snapshot_count Prämissen-Snapshots exportiert${NC}"
+        fi
+        
+        # Evolution-Log
+        if [ -f "$PROJECT_ROOT/local/development/premises/evolution.log" ]; then
+            cp "$PROJECT_ROOT/local/development/premises/evolution.log" "$DATA_EXPORT_DIR/premises_evolution.log"
+            echo -e "${GREEN}✅ Prämissen-Evolution exportiert${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Keine Prämissen-Daten gefunden${NC}"
+    fi
         cp "$DEV_DIR/claude_code_statistics.json" "$export_dir/"
     fi
     

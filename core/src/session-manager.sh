@@ -18,7 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOCAL_DIR="$PROJECT_ROOT/local"
 DEV_DIR="$LOCAL_DIR/development"
-SESSIONS_DIR="$DEV_DIR/protocols"
+SESSIONS_DIR="$DEV_DIR"
 SNAPSHOTS_DIR="$DEV_DIR/snapshots"
 
 # Session-Dateien
@@ -379,20 +379,152 @@ list_sessions() {
     
     local current_session=$(get_current_session)
     
-    find "$SESSIONS_DIR" -name "*.json" -type f | sort -r | while read -r session_file; do
+    echo -e "${BLUE}NAME                     STATUS   PROJEKT      OPS   STARTZEIT${NC}"
+    echo -e "${BLUE}--------------------------------------------------------------------${NC}"
+    
+    find "$SESSIONS_DIR" -name "session_*.json" -type f | sort -r | while read -r session_file; do
         local session_name=$(basename "$session_file" .json)
-        local status=$(jq -r '.status // "unknown"' "$session_file")
-        local echo "URL:"_time=$(jq -r '.start_time' "$session_file")
-        local project=$(jq -r '.project_context // "Unbekannt"' "$session_file")
-        local operations=$(jq -r '.statistics.operations_count' "$session_file")
+        local status=$(jq -r '.status // "active"' "$session_file")
+        local start_time=$(jq -r '.start_time' "$session_file")
+        local project=$(jq -r '.context.project // "Unbekannt"' "$session_file")
+        local operations=$(jq -r '.operations | length' "$session_file")
         
         local marker=""
         if [ "$session_name" = "$current_session" ]; then
             marker="🟢 "
         fi
         
-        echo -e "${marker}${session_name} (${status}) - ${project} - ${operations} ops - ${echo "URL:"_time}"
+        echo -e "${marker}${session_name} (${status}) - ${project} - ${operations} ops - ${start_time}"
     done
+}
+
+# Session-Details anzeigen
+show_session_details() {
+    local session_name="${1:-$(get_current_session)}"
+    
+    if [ -z "$session_name" ]; then
+        echo -e "${RED}Fehler: Keine Session angegeben und keine aktive Session gefunden${NC}"
+        return 1
+    fi
+    
+    local session_file="$SESSIONS_DIR/${session_name}.json"
+    
+    if [ ! -f "$session_file" ]; then
+        echo -e "${RED}Fehler: Session '$session_name' nicht gefunden${NC}"
+        return 1
+    fi
+    
+    echo -e "${CYAN}=== SESSION-DETAILS: $session_name ===${NC}"
+    echo ""
+    
+    # Basis-Informationen
+    echo -e "${BLUE}Basis-Informationen:${NC}"
+    echo "  Session ID:    $(jq -r '.session_id' "$session_file")"
+    echo "  Startzeit:     $(jq -r '.start_time' "$session_file")"
+    echo "  Standard-Modell: $(jq -r '.default_model // "Nicht gesetzt"' "$session_file")"
+    echo "  Gesamtkosten:  $(jq -r '.total_cost // 0' "$session_file")€"
+    echo "  Status:        $(jq -r '.status // "active"' "$session_file")"
+    echo ""
+    
+    # Kontext-Informationen
+    echo -e "${BLUE}Kontext:${NC}"
+    local context_keys=$(jq -r '.context | keys[]' "$session_file" 2>/dev/null)
+    if [ -n "$context_keys" ]; then
+        echo "$context_keys" | while read -r key; do
+            local value=$(jq -r ".context.${key}" "$session_file")
+            echo "  ${key}: ${value}"
+        done
+    else
+        echo "  (Kein Kontext gespeichert)"
+    fi
+    echo ""
+    
+    # Operationen
+    echo -e "${BLUE}Operationen ($(jq -r '.operations | length' "$session_file")):${NC}"
+    local ops_count=$(jq -r '.operations | length' "$session_file")
+    if [ "$ops_count" -gt 0 ]; then
+        jq -r '.operations[] | "  [\(.timestamp)] \(.type): \(.description // "Keine Beschreibung")"' "$session_file"
+    else
+        echo "  (Keine Operationen aufgezeichnet)"
+    fi
+    echo ""
+    
+    # Rohdaten (optional)
+    if [ "$2" = "--raw" ]; then
+        echo -e "${BLUE}Rohdaten (JSON):${NC}"
+        jq '.' "$session_file"
+    fi
+}
+
+# Leere Sessions bereinigen
+cleanup_sessions() {
+    local force_cleanup=false
+    if [ "$1" = "--force" ] || [ "$1" = "-f" ]; then
+        force_cleanup=true
+    fi
+    
+    if [ ! -d "$SESSIONS_DIR" ]; then
+        echo -e "${YELLOW}Keine Sessions gefunden${NC}"
+        return 0
+    fi
+    
+    local empty_sessions=()
+    local current_session=$(get_current_session)
+    
+    echo -e "${CYAN}=== SESSIONS ANALYSIEREN ===${NC}"
+    
+    # Leere Sessions identifizieren
+    while IFS= read -r -d '' session_file; do
+        local session_name=$(basename "$session_file" .json)
+        local operations_count=$(jq -r '.operations | length' "$session_file")
+        local context_keys=$(jq -r '.context | keys | length' "$session_file")
+        local total_cost=$(jq -r '.total_cost // 0' "$session_file")
+        
+        # Session gilt als leer wenn: keine Operationen, kein Kontext, keine Kosten
+        if [ "$operations_count" -eq 0 ] && [ "$context_keys" -eq 0 ] && [ "$total_cost" = "0" ]; then
+            if [ "$session_name" = "$current_session" ]; then
+                echo -e "${YELLOW}⚠️  $session_name (aktuelle Session, wird übersprungen)${NC}"
+            else
+                echo -e "${RED}🗑️  $session_name (leer)${NC}"
+                empty_sessions+=("$session_file")
+            fi
+        else
+            echo -e "${GREEN}✅ $session_name (enthält Daten)${NC}"
+        fi
+    done < <(find "$SESSIONS_DIR" -name "session_*.json" -type f -print0)
+    
+    if [ ${#empty_sessions[@]} -eq 0 ]; then
+        echo -e "${GREEN}Keine leeren Sessions zum Bereinigen gefunden${NC}"
+        return 0
+    fi
+    
+    echo ""
+    echo -e "${CYAN}Gefunden: ${#empty_sessions[@]} leere Session(s)${NC}"
+    
+    if [ "$force_cleanup" = false ]; then
+        echo -e "${YELLOW}Wirklich löschen? (j/N):${NC}"
+        read -r confirm
+        if [[ ! "$confirm" =~ ^[Jj]$ ]]; then
+            echo -e "${YELLOW}Abgebrochen${NC}"
+            return 0
+        fi
+    fi
+    
+    # Leere Sessions löschen
+    local deleted_count=0
+    for session_file in "${empty_sessions[@]}"; do
+        if rm "$session_file" 2>/dev/null; then
+            local session_name=$(basename "$session_file" .json)
+            echo -e "${GREEN}✅ Gelöscht: $session_name${NC}"
+            deleted_count=$((deleted_count + 1))
+        else
+            local session_name=$(basename "$session_file" .json)
+            echo -e "${RED}❌ Fehler beim Löschen: $session_name${NC}"
+        fi
+    done
+    
+    echo ""
+    echo -e "${CYAN}Bereinigung abgeschlossen: $deleted_count Session(s) gelöscht${NC}"
 }
 
 # Hauptprogramm
@@ -423,6 +555,12 @@ case "${1:-help}" in
         ;;
     "list")
         list_sessions
+        ;;
+    "show"|"details")
+        show_session_details "$2" "$3"
+        ;;
+    "cleanup")
+        cleanup_sessions "$2"
         ;;
     "current")
         get_current_session

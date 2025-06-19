@@ -1,1 +1,3 @@
 ai-collab-pm/
+local/config/.env
+local/config/settings.json

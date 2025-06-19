@@ -1,0 +1,115 @@
+{
+  "premises_version": "1.0.2",
+  "timestamp": "2025-06-19T21:29:41+00:00",
+  "context": "ai-collab System-Initialisierung",
+  "session_context": "Erstes Prämissen-Setup",
+  "premises": [
+    {
+      "id": "cost_optimization_first",
+      "category": "economic",
+      "principle": "Kostenoptimierung vor Feature-Komplexität",
+      "rationale": "Entwicklungskosten müssen vorhersagbar und kontrollierbar bleiben",
+      "confidence": 0.95,
+      "priority": "high",
+      "evidence": [
+        "75% Kostenersparnis bei CSV2Actual-Projekt erreicht",
+        "Template-System reduziert Prompt-Kosten um 60-70%"
+      ],
+      "metrics": {
+        "cost_reduction_target": 0.7,
+        "roi_threshold": 2.0
+      }
+    },
+    {
+      "id": "modular_architecture",
+      "category": "technical",
+      "principle": "Modulare Architektur mit loser Kopplung",
+      "rationale": "Jedes Modul muss eigenständig funktionieren und austauschbar sein",
+      "confidence": 0.9,
+      "priority": "high",
+      "evidence": [
+        "Bash-First-Ansatz für Portabilität",
+        "JSON-Kommunikation zwischen Modulen",
+        "Plugin-System erfolgreich implementiert"
+      ],
+      "metrics": {
+        "module_independence": 0.9,
+        "coupling_score": "low"
+      }
+    },
+    {
+      "id": "session_persistence",
+      "category": "operational",
+      "principle": "Vollständige Session-Persistenz und Reproduzierbarkeit",
+      "rationale": "Jede Entwicklungs-Interaktion muss reproduzierbar und nachvollziehbar sein",
+      "confidence": 0.85,
+      "priority": "medium",
+      "evidence": [
+        "Session-Manager implementiert",
+        "Parameter-Cache über Session-Grenzen hinweg",
+        "Kosten-Tracking vollständig"
+      ],
+      "metrics": {
+        "session_coverage": 0.9,
+        "reproducibility_score": 0.85
+      }
+    },
+    {
+      "id": "developer_experience",
+      "category": "user_experience",
+      "principle": "CLI-First für maximale Developer-Productivity",
+      "rationale": "Entwickler sollen sich auf Kreativität konzentrieren, ai-collab managt Komplexität",
+      "confidence": 0.8,
+      "priority": "medium",
+      "evidence": [
+        "Sofortiges Feedback in allen Modulen",
+        "Selbsterklärende Kommandozeilen-Tools",
+        "Fehlertoleranz bei fehlenden Komponenten"
+      ],
+      "metrics": {
+        "cli_response_time": "<2s",
+        "error_recovery_rate": 0.9
+      }
+    },
+    {
+      "id": "integration_ready",
+      "category": "ecosystem",
+      "principle": "Nahtlose Integration in bestehende Entwicklungs-Workflows",
+      "rationale": "ai-collab muss sich in vorhandene Tools einfügen, nicht ersetzen",
+      "confidence": 0.8,
+      "priority": "medium",
+      "evidence": [
+        "GitHub-Integration vollständig",
+        "PM-System (Kanboard) erfolgreich integriert",
+        "JSON-RPC-API für externe Tools"
+      ],
+      "metrics": {
+        "integration_coverage": [
+          "github",
+          "kanboard",
+          "json_rpc"
+        ],
+        "workflow_disruption": "minimal"
+      }
+    },
+    {
+      "id": "pm_integration_als_core_feature",
+      "category": "integration",
+      "principle": "PM-Integration als Core-Feature",
+      "rationale": "Stakeholder-Transparenz und Team-Kollaboration sind kritisch",
+      "confidence": 0.9,
+      "priority": "medium",
+      "evidence": [],
+      "added_at": "2025-06-19T21:29:41+00:00"
+    }
+  ],
+  "meta": {
+    "total_premises": 6,
+    "avg_confidence": 0.8666666666666667,
+    "last_review": "2025-06-19T21:29:23+00:00",
+    "next_review_due": "2025-06-26T21:29:23+00:00"
+  },
+  "snapshot_description": "Prämissen-Management-Modul erfolgreich implementiert",
+  "snapshot_timestamp": "2025-06-19T21:31:05+00:00",
+  "previous_version": "1.0.2"
+}

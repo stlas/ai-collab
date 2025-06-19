@@ -1,0 +1,35 @@
+{
+  "export_timestamp": "2025-06-19T21:38:09+00:00",
+  "source": "claude_code_session",
+  "todo_items": [
+    {
+      "id": "1",
+      "title": "PM-System Integration prüfen",
+      "description": "Datenaustausch zwischen ai-collab und Kanban überprüfen",
+      "status": "completed",
+      "priority": "high",
+      "category": "system_integration"
+    },
+    {
+      "id": "2", 
+      "title": "Sync-Mechanismus analysieren",
+      "description": "Wie werden Tasks zwischen Systemen synchronisiert",
+      "status": "completed",
+      "priority": "high",
+      "category": "analysis"
+    },
+    {
+      "id": "3",
+      "title": "Todo-Liste mit PM-System verknüpfen",
+      "description": "Sync zwischen Claude Todo-Liste und Kanban-Tasks implementieren",
+      "status": "in_progress", 
+      "priority": "medium",
+      "category": "development"
+    }
+  ],
+  "integration_meta": {
+    "session_context": "ai-collab workflow analysis",
+    "export_format": "kanban_ready",
+    "auto_sync": true
+  }
+}
