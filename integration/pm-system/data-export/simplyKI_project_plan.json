@@ -1,0 +1,237 @@
+{
+  "project_name": "SimplyKI Meta-Framework",
+  "project_description": "Entwicklung eines Meta-Frameworks für KI-Development-Tools mit ai-collab als erstem Subprojekt",
+  "created_date": "2025-06-19T22:14:00+00:00",
+  "project_lead": "stlas",
+  "ai_assistant": "Claude",
+  "repository": "stlas/SimplyKI",
+  "phases": [
+    {
+      "phase": "1_repository_setup",
+      "title": "Repository & Grundstruktur",
+      "tasks": [
+        {
+          "id": "repo_1",
+          "title": "Neues GitHub Repository stlas/SimplyKI erstellen",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "GitHub Repository mit korrekten Settings, Lizenz und README erstellen"
+        },
+        {
+          "id": "repo_2", 
+          "title": "Basis-Verzeichnisstruktur aufbauen",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 2,
+          "description": "Ordnerstruktur: web/, core/, tools/, docs/ mit entsprechenden README-Dateien"
+        },
+        {
+          "id": "repo_3",
+          "title": "ai-collab als Git-Submodul einbinden",
+          "assigned_to": "Claude", 
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "ai-collab Repository als Submodul unter tools/ integrieren"
+        },
+        {
+          "id": "repo_4",
+          "title": "Repository-Namen und URLs finalisieren",
+          "assigned_to": "stlas",
+          "priority": "high", 
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "description": "Endgültige Repository-Namen, Branch-Strategien und URL-Struktur festlegen"
+        },
+        {
+          "id": "repo_5",
+          "title": "Branding-Guidelines für SimplyKI definieren",
+          "assigned_to": "stlas",
+          "priority": "medium",
+          "status": "pending", 
+          "estimated_hours": 2,
+          "description": "Logo, Farbschema, Typography und Brand-Voice für SimplyKI festlegen"
+        }
+      ]
+    },
+    {
+      "phase": "2_pm_integration", 
+      "title": "PM-System & Task-Management",
+      "tasks": [
+        {
+          "id": "pm_1",
+          "title": "Claude-User im PM-System anlegen",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "description": "Benutzer Claude im Kanboard-System anlegen für Task-Zuweisungen"
+        },
+        {
+          "id": "pm_2", 
+          "title": "Alle Tasks ins PM-System exportieren",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "Automatischen Export aller SimplyKI-Tasks ins PM-System implementieren"
+        },
+        {
+          "id": "pm_3",
+          "title": "PM-System für Multi-Repository konfigurieren", 
+          "assigned_to": "stlas",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 2,
+          "description": "Kanboard-Setup für mehrere Repositories und Cross-Projekt-Tasks"
+        },
+        {
+          "id": "pm_4",
+          "title": "Task-Zuweisungen Claude/User definieren",
+          "assigned_to": "Claude",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "Klare Aufgabenteilung zwischen KI und Human definieren und dokumentieren"
+        }
+      ]
+    },
+    {
+      "phase": "3_core_infrastructure",
+      "title": "Core-Infrastruktur & Architektur", 
+      "tasks": [
+        {
+          "id": "core_1",
+          "title": "Zentrale Konfiguration (config/, auth/)",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 3,
+          "description": "Einheitliches Config-System für alle SimplyKI-Tools entwickeln"
+        },
+        {
+          "id": "core_2",
+          "title": "Plugin-System-Architektur entwerfen",
+          "assigned_to": "Claude", 
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 4,
+          "description": "Modulares Plugin-System für einfache Integration neuer KI-Tools"
+        },
+        {
+          "id": "core_3",
+          "title": "API-Struktur für Tool-Integration definieren",
+          "assigned_to": "Claude",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 3,
+          "description": "REST-API für Kommunikation zwischen Tools und Web-Frontend"
+        },
+        {
+          "id": "core_4",
+          "title": "Lizenz-Strategie festlegen",
+          "assigned_to": "stlas",
+          "priority": "medium", 
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "Einheitliche Lizenzierung für alle SimplyKI-Komponenten (MIT empfohlen)"
+        }
+      ]
+    },
+    {
+      "phase": "4_web_frontend",
+      "title": "Web-Frontend & Dashboard",
+      "tasks": [
+        {
+          "id": "web_1",
+          "title": "Web-Dashboard Grundstruktur",
+          "assigned_to": "Claude",
+          "priority": "medium",
+          "status": "pending", 
+          "estimated_hours": 6,
+          "description": "Responsive Web-Interface als zentrale Anlaufstelle für alle Tools"
+        },
+        {
+          "id": "web_2", 
+          "title": "Tool-Integration-Framework",
+          "assigned_to": "Claude",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 4,
+          "description": "Framework zur einfachen Integration neuer Tools ins Web-Dashboard"
+        },
+        {
+          "id": "web_3",
+          "title": "Landing-Page Konzept für SimplyKI",
+          "assigned_to": "stlas",
+          "priority": "low",
+          "status": "pending",
+          "estimated_hours": 3,
+          "description": "Marketing-orientierte Landing-Page mit Tool-Übersicht und Features"
+        }
+      ]
+    },
+    {
+      "phase": "5_documentation",
+      "title": "Dokumentation & Community",
+      "tasks": [
+        {
+          "id": "doc_1",
+          "title": "SimplyKI Meta-Framework README schreiben",
+          "assigned_to": "Claude",
+          "priority": "high",
+          "status": "pending",
+          "estimated_hours": 2, 
+          "description": "Umfassende Dokumentation des Meta-Framework-Konzepts"
+        },
+        {
+          "id": "doc_2",
+          "title": "Cross-Repository Development-Workflow dokumentieren",
+          "assigned_to": "Claude",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 2,
+          "description": "Workflow für Entwicklung über mehrere Repositories hinweg"
+        },
+        {
+          "id": "doc_3",
+          "title": "Community-Guidelines erstellen", 
+          "assigned_to": "stlas",
+          "priority": "low",
+          "status": "pending",
+          "estimated_hours": 2,
+          "description": "Richtlinien für Contributors und Community-Mitglieder"
+        },
+        {
+          "id": "doc_4",
+          "title": "Documentation-Strategy planen",
+          "assigned_to": "stlas",
+          "priority": "medium",
+          "status": "pending",
+          "estimated_hours": 1,
+          "description": "Langfristige Strategie für Dokumentation und Knowledge-Management"
+        }
+      ]
+    }
+  ],
+  "success_criteria": [
+    "SimplyKI Repository ist funktional und gut dokumentiert",
+    "ai-collab ist erfolgreich als erstes Tool integriert", 
+    "Plugin-System ermöglicht einfache Integration neuer Tools",
+    "Web-Dashboard zeigt alle verfügbaren Tools an",
+    "PM-System tracked alle Tasks für beide Benutzer"
+  ],
+  "risks": [
+    "Komplexität des Multi-Repository-Setups",
+    "Synchronisation zwischen verschiedenen Tools",
+    "Performance des Web-Frontends bei vielen Tools"
+  ],
+  "next_steps": [
+    "GitHub Repository erstellen",
+    "Claude-User im PM-System anlegen", 
+    "Erste Tasks in Angriff nehmen"
+  ]
+}
