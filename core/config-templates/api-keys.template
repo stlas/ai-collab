@@ -1,0 +1,21 @@
+# API Keys Configuration Template
+# 
+# WICHTIG: Diese Datei ist nur ein Template!
+# 1. Kopieren Sie diese Datei nach 'local/config/api-keys.local'
+# 2. Fügen Sie Ihre echten API-Keys ein
+# 3. Die .local Datei wird NICHT in Git eingecheckt
+#
+# mkdir -p local/config
+# cp core/config-templates/api-keys.template local/config/api-keys.local
+# chmod 600 local/config/api-keys.local
+
+# Anthropic Claude API
+ANTHROPIC_API_KEY=sk-ant-api03-YOUR-KEY-HERE
+
+# OpenAI (optional)
+OPENAI_API_KEY=sk-YOUR-KEY-HERE
+
+# GitHub Personal Access Token
+GITHUB_TOKEN=ghp_YOUR-TOKEN-HERE
+
+# Weitere API-Keys hier hinzufügen...

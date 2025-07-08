@@ -1,0 +1,33 @@
+{
+  "api": {
+    "anthropic": {
+      "apiKey": "SIEHE_API_KEYS_LOCAL",
+      "defaultModel": "claude-3-5-haiku-20241022",
+      "models": {
+        "haiku": "claude-3-5-haiku-20241022",
+        "sonnet": "claude-3-5-sonnet-20241022",
+        "opus": "claude-3-opus-20240229"
+      }
+    },
+    "github": {
+      "token": "SIEHE_API_KEYS_LOCAL",
+      "username": "YOUR_GITHUB_USERNAME",
+      "email": "your.email@example.com"
+    }
+  },
+  "development": {
+    "defaultProject": "",
+    "sessionsPath": "local/development/sessions",
+    "snapshotsPath": "local/development/snapshots",
+    "logsPath": "local/development/logs"
+  },
+  "costTracking": {
+    "dailyBudget": 5.0,
+    "currency": "USD",
+    "warningThreshold": 0.8
+  },
+  "templates": {
+    "defaultLanguage": "generic",
+    "customTemplatesPath": "local/templates"
+  }
+}
