@@ -81,6 +81,21 @@ show_task_status() {
     echo
 }
 
+# Projekte anzeigen
+show_projects() {
+    log "=== PM-System Projekte ==="
+    
+    echo
+    sqlite3 "$PM_DB" "
+    SELECT 
+        id || '|' || name || '|' || COALESCE(description, '')
+    FROM projects 
+    WHERE is_active = 1
+    ORDER BY id;
+    "
+    echo
+}
+
 # Statistiken anzeigen
 show_statistics() {
     log "=== SimplyKI Task-Statistiken ==="
@@ -120,6 +135,9 @@ main() {
         "status"|"show")
             show_task_status
             ;;
+        "projects")
+            show_projects
+            ;;
         "stats"|"statistics")
             show_statistics
             ;;
@@ -128,6 +146,7 @@ main() {
             echo
             echo "Verfügbare Kommandos:"
             echo "  status, show       - Zeige aktuellen Task-Status"
+            echo "  projects           - Zeige alle Projekte"
             echo "  stats, statistics  - Zeige Task-Statistiken"
             echo "  help               - Diese Hilfe"
             ;;

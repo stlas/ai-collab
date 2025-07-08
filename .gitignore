@@ -1,3 +1,71 @@
+# AI-Collab Gitignore
+
+# Lokale Konfiguration und private Daten
+local/
+*.backup
+*.tmp
+*.log
+.env
+.env.*
+CLAUDE.local.md
+
+# API Keys und Credentials
+*credentials*
+*token*
+*secret*
+*password*
+*.key
+*.pem
+*api_key*
+*access_token*
+
+# PM-System (enthält persönliche Daten)
 ai-collab-pm/
-local/config/.env
-local/config/settings.json
+integration/pm-system/data-export/
+
+# IDE und Editor
+.vscode/
+.vscode-server/
+.idea/
+*.swp
+*.swo
+*~
+
+# System
+.DS_Store
+Thumbs.db
+.bash_history
+.bashrc
+
+# Session und Development Daten
+sessions/
+snapshots/
+logs/
+cache/
+.cache/
+.claude/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Temporäre Dateien
+*.tmp
+*.temp
+zu_loeschen/
+
+# Screenshots
+Screenshot*.png
+*.screenshot.png
